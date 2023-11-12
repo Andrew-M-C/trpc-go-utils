@@ -44,14 +44,13 @@ func initTable(ctx context.Context) error {
 		if s = strings.TrimSpace(s); s == "" {
 			continue
 		}
-		log.DebugContextf(ctx, "执行 SQL: %v", s)
 		if _, err := proxy.Exec(ctx, s); err != nil {
 			log.ErrorContextf(ctx, "执行 sql 失败, 错误信息: %v, SQL 语句: %v", err, tracelog.ToJSON(s))
 			return fmt.Errorf("执行初始化命令 #%d 失败: %w", i, err)
 		}
 	}
 
-	log.DebugContext(ctx, "mysql 注册表初始化成功")
+	log.TraceContextf(ctx, "mysql 注册表初始化成功")
 	internal.tableCreated = true
 	return nil
 }

@@ -86,9 +86,23 @@ func (myqlSelector) Select(name string, opts ...selector.Option) (_ *registry.No
 	return nodes[idx].GetNode(), nil
 }
 
-func (myqlSelector) Report(node *registry.Node, cost time.Duration, err error) error {
-	log.Infof("要求汇报错误, node %+v, cost %v, err %v", node, cost, err)
-	return err
+func (myqlSelector) Report(nod *registry.Node, cost time.Duration, err error) error {
+	if err == nil {
+		return nil
+	}
+	log.Infof("RPC 错误, node %v, cost %v, err: %v", tracelog.ToJSON(nod), cost, err)
+	nodes, exist := internal.clients.Load(nod.ServiceName)
+	if !exist {
+		return fmt.Errorf("本地无法找到服务 %s", nod.ServiceName)
+	}
+	newNodes := make([]*node, 0, len(nodes))
+	for _, n := range nodes {
+		if n.node.Address != nod.Address {
+			newNodes = append(newNodes, n)
+		}
+	}
+	internal.clients.Store(nod.ServiceName, newNodes)
+	return nil
 }
 
 // 读取一个节点, 如果发现有过期的, 就返回 nil, 触发更新缓存
