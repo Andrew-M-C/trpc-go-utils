@@ -4,7 +4,8 @@ import (
 	"context"
 	"encoding/json"
 
-	trpc "trpc.group/trpc-go/trpc-go"
+	"github.com/google/uuid"
+	"trpc.group/trpc-go/trpc-go"
 	"trpc.group/trpc-go/trpc-go/codec"
 	"trpc.group/trpc-go/trpc-go/filter"
 )
@@ -36,9 +37,13 @@ func serverFilter(ctx context.Context, req any, next filter.ServerHandleFunc) (r
 }
 
 func clientFilter(ctx context.Context, req, rsp any, next filter.ClientHandleFunc) error {
-	ctx = EnsureTraceID(ctx)
-	stack := TraceIDStack(ctx)
-	b, _ := json.Marshal(stack)
-	trpc.SetMetaData(ctx, TraceIDStackMetadataKey, b)
+	// ctx = EnsureTraceID(ctx)
+	if stack := TraceIDStack(ctx); len(stack) > 0 {
+		b, _ := json.Marshal(stack)
+		trpc.SetMetaData(ctx, TraceIDStackMetadataKey, b)
+	} else {
+		b, _ := json.Marshal([]string{uuid.NewString()})
+		trpc.SetMetaData(ctx, TraceIDStackMetadataKey, b)
+	}
 	return next(ctx, req, rsp)
 }

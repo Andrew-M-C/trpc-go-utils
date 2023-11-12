@@ -105,7 +105,7 @@ func TraceIDStack(ctx context.Context) []string {
 func EnsureTraceID(ctx context.Context) context.Context {
 	traceID := TraceID(ctx)
 	if traceID == "" {
-		return WithTraceID(ctx, uuid.New().String())
+		return WithTraceID(ctx, uuid.NewString())
 	}
 	return ctx
 }
