@@ -4,7 +4,7 @@ package tracelog
 import (
 	"context"
 
-	"github.com/google/uuid"
+	"github.com/Andrew-M-C/go.util/ids/snowflake"
 	"golang.org/x/exp/slices"
 	"trpc.group/trpc-go/trpc-go/codec"
 	"trpc.group/trpc-go/trpc-go/log"
@@ -105,7 +105,7 @@ func TraceIDStack(ctx context.Context) []string {
 func EnsureTraceID(ctx context.Context) context.Context {
 	traceID := TraceID(ctx)
 	if traceID == "" {
-		return WithTraceID(ctx, uuid.NewString())
+		return WithTraceID(ctx, snowflake.New().Base36())
 	}
 	return ctx
 }
