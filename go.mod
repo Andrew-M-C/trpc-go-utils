@@ -4,7 +4,6 @@ go 1.20
 
 require (
 	github.com/Andrew-M-C/go.util v0.0.0-20231130030813-ea67c77233dc
-	github.com/google/uuid v1.4.0
 	golang.org/x/exp v0.0.0-20231127185646-65229373498e
 	trpc.group/trpc-go/trpc-database/mysql v1.0.0
 	trpc.group/trpc-go/trpc-go v1.0.1

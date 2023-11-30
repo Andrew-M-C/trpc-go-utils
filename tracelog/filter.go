@@ -7,7 +7,6 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/google/uuid"
 	"trpc.group/trpc-go/trpc-go"
 	"trpc.group/trpc-go/trpc-go/codec"
 	"trpc.group/trpc-go/trpc-go/filter"
@@ -78,7 +77,7 @@ func clientFilter(ctx context.Context, req, rsp any, next filter.ClientHandleFun
 		b, _ := json.Marshal(stack)
 		trpc.SetMetaData(ctx, TraceIDStackMetadataKey, b)
 	} else {
-		b, _ := json.Marshal([]string{uuid.NewString()})
+		b, _ := json.Marshal([]string{generateTraceID()})
 		trpc.SetMetaData(ctx, TraceIDStackMetadataKey, b)
 	}
 

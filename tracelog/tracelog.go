@@ -105,7 +105,11 @@ func TraceIDStack(ctx context.Context) []string {
 func EnsureTraceID(ctx context.Context) context.Context {
 	traceID := TraceID(ctx)
 	if traceID == "" {
-		return WithTraceID(ctx, snowflake.New().Base36())
+		return WithTraceID(ctx, generateTraceID())
 	}
 	return ctx
+}
+
+func generateTraceID() string {
+	return snowflake.New().Base36()
 }
