@@ -1,11 +1,11 @@
 module github.com/Andrew-M-C/trpc-go-utils
 
-go 1.19
+go 1.20
 
 require (
-	github.com/Andrew-M-C/go.util v0.0.0-20231120032841-f606c5bf4e45
+	github.com/Andrew-M-C/go.util v0.0.0-20231130030813-ea67c77233dc
 	github.com/google/uuid v1.4.0
-	golang.org/x/exp v0.0.0-20231108232855-2478ac86f678
+	golang.org/x/exp v0.0.0-20231127185646-65229373498e
 	trpc.group/trpc-go/trpc-database/mysql v1.0.0
 	trpc.group/trpc-go/trpc-go v1.0.1
 )
@@ -20,7 +20,7 @@ require (
 	github.com/fatih/color v1.16.0 // indirect
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/go-playground/form/v4 v4.2.0 // indirect
-	github.com/go-sql-driver/mysql v1.7.1 // indirect
+	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/golang/snappy v0.0.3 // indirect
 	github.com/google/flatbuffers v2.0.0+incompatible // indirect
 	github.com/hashicorp/errwrap v1.0.0 // indirect
