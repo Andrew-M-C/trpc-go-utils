@@ -17,6 +17,14 @@ func RegisterPlugin[T any](typ, name string, receiver func(*T) error) {
 	plugin.Register(name, p)
 }
 
+// BindPlugin 将 plugins 配置与本地存储绑定
+func BindPlugin[T any](typ, name string, target *T) {
+	RegisterPlugin[T](typ, name, func(t *T) error {
+		*target = *t
+		return nil
+	})
+}
+
 type pluginFactory[T any] struct {
 	typ, name string
 	receiver  func(*T) error
