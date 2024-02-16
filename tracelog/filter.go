@@ -21,7 +21,8 @@ const (
 	TraceIDStackMetadataKey = "trace_id_stack"
 )
 
-func init() {
+// RegisterTraceLogFilter 注册 tracelog filter。请在 trpc.NewServer 之前调用。
+func RegisterTraceLogFilter() {
 	filter.Register(FilterName, serverFilter, clientFilter)
 }
 
@@ -50,7 +51,7 @@ func serverFilter(ctx context.Context, req any, next filter.ServerHandleFunc) (r
 	ela := time.Since(start)
 
 	if err != nil {
-		log.ErrorContextf(ctx,
+		log.WarnContextf(ctx,
 			`{"caller":%v,"http_req":%v,"server_metadata":%v,`+
 				`"req":%v,"req_type":%v,"rsp":%v,"rsp_type":%v,`+
 				`"cost":"%v","error":%v}`,
