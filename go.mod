@@ -9,7 +9,7 @@ require (
 	github.com/Andrew-M-C/go.util/recovery v0.0.0-20240305040057-34fd9d5dbbca
 	github.com/Andrew-M-C/go.util/runtime v0.0.0-20240305040057-34fd9d5dbbca
 	github.com/Andrew-M-C/go.util/sync v0.0.0-20240305040057-34fd9d5dbbca
-	github.com/glycerine/goconvey v0.0.0-20190410193231-58a59202ab31
+	github.com/smartystreets/goconvey v1.8.1
 	golang.org/x/exp v0.0.0-20240222234643-814bf88cf225
 	trpc.group/trpc-go/trpc-database/mysql v1.0.0
 	trpc.group/trpc-go/trpc-go v1.0.2
@@ -50,6 +50,7 @@ require (
 	github.com/petermattis/goid v0.0.0-20231207134359-e60b3f734c67 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/shopspring/decimal v1.3.1 // indirect
+	github.com/smarty/assertions v1.15.0 // indirect
 	github.com/spf13/cast v1.3.1 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.43.0 // indirect

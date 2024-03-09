@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/Andrew-M-C/trpc-go-utils/errs"
-	"github.com/glycerine/goconvey/convey"
+	"github.com/smartystreets/goconvey/convey"
 )
 
 var (
