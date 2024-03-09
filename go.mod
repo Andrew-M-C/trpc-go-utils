@@ -3,11 +3,13 @@ module github.com/Andrew-M-C/trpc-go-utils
 go 1.20
 
 require (
+	github.com/Andrew-M-C/go.util/errors v0.0.0-20240305040057-34fd9d5dbbca
 	github.com/Andrew-M-C/go.util/ids v0.0.0-20240305040057-34fd9d5dbbca
 	github.com/Andrew-M-C/go.util/maps v0.0.0-20240305040057-34fd9d5dbbca
 	github.com/Andrew-M-C/go.util/recovery v0.0.0-20240305040057-34fd9d5dbbca
 	github.com/Andrew-M-C/go.util/runtime v0.0.0-20240305040057-34fd9d5dbbca
 	github.com/Andrew-M-C/go.util/sync v0.0.0-20240305040057-34fd9d5dbbca
+	github.com/glycerine/goconvey v0.0.0-20190410193231-58a59202ab31
 	golang.org/x/exp v0.0.0-20240222234643-814bf88cf225
 	trpc.group/trpc-go/trpc-database/mysql v1.0.0
 	trpc.group/trpc-go/trpc-go v1.0.2
@@ -29,10 +31,12 @@ require (
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/golang/snappy v0.0.3 // indirect
 	github.com/google/flatbuffers v2.0.0+incompatible // indirect
+	github.com/gopherjs/gopherjs v1.17.2 // indirect
 	github.com/hashicorp/errwrap v1.0.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/jmoiron/sqlx v1.3.5 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
+	github.com/jtolds/gls v4.20.0+incompatible // indirect
 	github.com/klauspost/compress v1.15.9 // indirect
 	github.com/kr/text v0.2.0 // indirect
 	github.com/lestrrat-go/strftime v1.0.6 // indirect
