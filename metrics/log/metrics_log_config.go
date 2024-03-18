@@ -4,7 +4,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/Andrew-M-C/trpc-go-utils/config"
+	"github.com/Andrew-M-C/trpc-go-utils/plugin"
 	"trpc.group/trpc-go/trpc-go/log"
 )
 
@@ -16,7 +16,7 @@ type sinkConfig struct {
 func (impl *sinkImpl) registerPlugin() {
 	impl.server = os.Args[0]
 
-	config.RegisterPlugin(PluginType, PluginName, func(c *sinkConfig) error {
+	plugin.Register(PluginType, PluginName, func(c *sinkConfig) error {
 		if c.Name != "" {
 			impl.server = c.Name
 		}

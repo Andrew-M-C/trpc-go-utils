@@ -1,5 +1,5 @@
-// Package config 提供 trpc 启动配置的工具
-package config
+// Package plugin 提供 trpc 启动配置中的 plugin 工具
+package plugin
 
 import (
 	"fmt"
@@ -7,8 +7,8 @@ import (
 	"trpc.group/trpc-go/trpc-go/plugin"
 )
 
-// RegisterPlugin 注册 plugin 配置。请在 init 阶段调用或 NewServer 之前调用。
-func RegisterPlugin[T any](typ, name string, receiver func(*T) error) {
+// Register 注册 plugin 配置。请在 init 阶段调用或 NewServer 之前调用。
+func Register[T any](typ, name string, receiver func(*T) error) {
 	p := &pluginFactory[T]{
 		typ:      typ,
 		name:     name,
@@ -17,9 +17,9 @@ func RegisterPlugin[T any](typ, name string, receiver func(*T) error) {
 	plugin.Register(name, p)
 }
 
-// BindPlugin 将 plugins 配置与本地存储绑定
-func BindPlugin[T any](typ, name string, target *T) {
-	RegisterPlugin[T](typ, name, func(t *T) error {
+// Bind 将 plugins 配置与本地存储绑定
+func Bind[T any](typ, name string, target *T) {
+	Register[T](typ, name, func(t *T) error {
 		*target = *t
 		return nil
 	})
