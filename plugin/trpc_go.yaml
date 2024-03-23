@@ -1,0 +1,16 @@
+
+server:
+  service:
+    - name: demo.httpauth.Auth
+      ip: 127.0.0.1
+      # nic: eth0
+      port: 8001
+      network: tcp
+      protocol: http
+      timeout: 1800
+
+plugin:
+  test_type:
+    test_name:
+      string: Hello, world!
+      int: 12345678
