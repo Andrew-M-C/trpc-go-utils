@@ -8,7 +8,6 @@ import (
 
 	"trpc.group/trpc-go/trpc-go/config"
 	"trpc.group/trpc-go/trpc-go/log"
-	"trpc.group/trpc-go/trpc-go/metrics"
 )
 
 // Encoding 定义了编解码格式
@@ -99,15 +98,15 @@ func Watch[T any](
 		for res := range notify {
 			holder := new(T)
 			if err := updateValue(key, res.Value(), unmarshaler, &holder); err != nil {
-				metrics.Counter("utils.config.update.fail").Incr()
+				count("update.fail")
 				log.Errorf("更新配置 key '%s' 失败: %v", key, err)
 				continue
 			}
-			metrics.Counter("utils.config.update.succ").Incr()
+			count("update.succ")
 			ch <- holder
 		}
 	}()
 
-	metrics.Counter("utils.config.initialize.succ").Incr()
+	count("initialize.succ")
 	return holder, ch, nil
 }
