@@ -17,7 +17,7 @@ const (
 )
 
 // ReplaceGlobalClient 支持通过 etcd 修改 client 配置, 并且覆盖 tRPC global config
-func ReplaceGlobalClient(ctx context.Context, s *server.Service, key string) error {
+func ReplaceGlobalClient(ctx context.Context, s server.Service, key string) error {
 	if s == nil {
 		return fmt.Errorf("%w: tRPC server not yet initialized", ErrClientYAML)
 	}
