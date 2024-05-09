@@ -10,21 +10,14 @@ import (
 	"trpc.group/trpc-go/trpc-go/errs"
 )
 
+var (
+	// UndefinedError 表示未定义错误
+	UndefinedError = errs.New(999, "undefined error").(*errs.Error)
+)
+
 // New 是对 tRPC errs New 的简单封装, 避免引入两个同名 package
 func New[T errs.ErrCode](code T, msg string) error {
 	return errs.New(code, msg)
-}
-
-// SetUndefinedError 设置未知错误的错误码。默认为 -1
-func SetUndefinedError[T constraints.Integer](code T, msg string) {
-	internal.unknownErrorCode = int32(code)
-	internal.unknownErrorMsg = &msg
-}
-
-// SetSuccess 设置成功码, 默认为 0
-func SetSuccess[T constraints.Integer](code T, msg string) {
-	internal.successCode = int32(code)
-	internal.successMsg = &msg
 }
 
 // SetDigestDescription 当不暴露具体错误, 但给出摘要值时, 摘要值的描述名是什么
@@ -49,7 +42,7 @@ func ExtractCodeMessageDigest[T constraints.Integer](err error) (code T, msg str
 	}()
 
 	if err == nil {
-		return T(internal.successCode), *internal.successMsg
+		return 0, "success"
 	}
 
 	if trpcErr, ok := err.(*errs.Error); ok {
@@ -58,10 +51,10 @@ func ExtractCodeMessageDigest[T constraints.Integer](err error) (code T, msg str
 
 	var trpcErr *errs.Error
 	if !errors.As(err, &trpcErr) {
-		code = T(internal.unknownErrorCode)
+		code = T(UndefinedError.Code)
 		msg = fmt.Sprintf(
 			"%s, %s: %s",
-			*internal.unknownErrorMsg, *internal.digestDesc, internal.hashFunc(err),
+			UndefinedError.Msg, *internal.digestDesc, internal.hashFunc(err),
 		)
 		return
 	}
@@ -81,13 +74,13 @@ func ExtractCodeMessage[T constraints.Integer](err error) (code T, msg string) {
 	}()
 
 	if err == nil {
-		return T(internal.successCode), *internal.successMsg
+		return 0, "success"
 	}
 
 	var trpcErr *errs.Error
 	if !errors.As(err, &trpcErr) {
-		code = T(internal.unknownErrorCode)
-		msg = *internal.unknownErrorMsg
+		code = T(UndefinedError.Code)
+		msg = UndefinedError.Msg
 		return
 	}
 
