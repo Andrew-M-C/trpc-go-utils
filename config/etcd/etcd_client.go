@@ -16,11 +16,19 @@ const (
 	ErrClientYAML = E("amc etcd client YAML error")
 )
 
-// ReplaceGlobalClient 支持通过 etcd 修改 client 配置, 并且覆盖 tRPC global config
-func ReplaceGlobalClient(ctx context.Context, s server.Service, key string) error {
+// RegisterClientProvider 注册 etcd tRPC client provider 配置, 支持通过 etcd 修改
+// client 配置, 并且覆盖 tRPC global config
+func RegisterClientProvider(ctx context.Context, s *server.Server, key string) error {
 	if s == nil {
-		return fmt.Errorf("%w: tRPC server not yet initialized", ErrClientYAML)
+		return fmt.Errorf("%w: tRPC server is nil", ErrClientYAML)
 	}
+	if (API{}).GetConfig() == nil {
+		return fmt.Errorf("%w: etcd config was not configured", ErrClientYAML)
+	}
+	if key == "" {
+		return fmt.Errorf("%w: configuration key is empty", ErrClientYAML)
+	}
+
 	newConfig, watcher, err := configutil.Watch[trpc.Config](
 		ctx, API{}, configutil.YAML, key,
 	)
@@ -37,18 +45,12 @@ func ReplaceGlobalClient(ctx context.Context, s server.Service, key string) erro
 }
 
 func updateClientYAML(client trpc.ClientConfig) {
-	// 填充 callee 字段, 在 trpc 中使用的是这个字段
-	for _, cli := range client.Service {
-		if cli.Callee == "" {
-			cli.Callee = cli.ServiceName
-		}
-	}
-
 	trpcGlobal := deepCopyGlobalConfig(trpc.GlobalConfig())
 	trpcGlobal.Client = client
+	_ = trpc.RepairConfig(trpcGlobal)
 
 	if err := trpc.SetupClients(&client); err != nil {
-		log.Errorf("%s Setup clients failed, raw config '%+v', error: '%v'", client, err)
+		log.Errorf("%s Setup clients failed, raw config '%+v', error: '%v'", logPrefix, client, err)
 		count("clientUpdate.fail")
 		return
 	}
@@ -66,8 +68,6 @@ func deepCopyGlobalConfig(in *trpc.Config) *trpc.Config {
 }
 
 func doWatch(key string, watcher <-chan *trpc.Config) {
-	log.Debugf("%s Start watching client yaml config '%s'", logPrefix, key)
-
 	for updatedClient := range watcher {
 		updateClientYAML(updatedClient.Client)
 	}

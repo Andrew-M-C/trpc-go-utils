@@ -98,7 +98,7 @@ func clientFilter(ctx context.Context, req, rsp any, next filter.ClientHandleFun
 		log.ErrorContextf(ctx,
 			`{"callee":%v,"http_req":%v,"server_metadata":%v,`+
 				`"req":%v,"req_type":%v,"rsp":%v,"rsp_type":%v,`+
-				`"cost":"%v"`,
+				`"cost":"%v", "error": %v`,
 			ToJSON(callee), ToJSON(httpReq), ToJSON(metadata),
 			ToJSON(req), typeString(reflect.TypeOf(req)), ToJSON(rsp), typeString(reflect.TypeOf(rsp)),
 			ela, ToErrJSON(err),

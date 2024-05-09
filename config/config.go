@@ -91,6 +91,8 @@ func Watch[T any](
 	if conf == nil {
 		return nil, nil, fmt.Errorf("%w: api 无法获取配置, 请检查是否相应的配置未注册", ErrConfig)
 	}
+
+	// 由于各配置中心经常有一个问题: 针对同一个 key 无法被多个消费者监听, 因此需要封装一层, 统一获取一个实例
 	if res, err := conf.Get(ctx, key); err != nil {
 		return nil, nil, fmt.Errorf("%w: 获取配置失败 (%v)", ErrConfig, err)
 	} else if err := updateValue(key, res.Value(), unmarshaler, &holder); err != nil {
@@ -98,12 +100,16 @@ func Watch[T any](
 	}
 
 	// 监听并更新后续变化值
-	notify, err := conf.Watch(ctx, key)
-	if err != nil {
+	watchAndDispatch, _ := internal.watchersByKey.LoadOrStore(
+		fmt.Sprintf("%s+%s", conf.Name(), key), newWatchAndDispatcher(conf, key),
+	)
+
+	notify := watchAndDispatch.NewNotify()
+	if err := watchAndDispatch.DoWatch(ctx); err != nil {
 		return nil, nil, fmt.Errorf("%w: watch 配置 key '%s' 失败 (%v)", ErrConfig, key, err)
 	}
 
-	ch := make(chan *T)
+	ch := make(chan *T, 1)
 	go func() {
 		for res := range notify {
 			holder := new(T)
