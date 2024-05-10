@@ -67,7 +67,7 @@ func deepCopyGlobalConfig(in *trpc.Config) *trpc.Config {
 	return &out
 }
 
-func doWatch(key string, watcher <-chan *trpc.Config) {
+func doWatch(_ string, watcher <-chan *trpc.Config) {
 	for updatedClient := range watcher {
 		updateClientYAML(updatedClient.Client)
 	}
