@@ -14,6 +14,7 @@ import (
 // GormGetterFunc 定义获取 gorm DB 的获取函数
 type GormGetterFunc func(context.Context) (*gorm.DB, error)
 
+// GormGetter 动态获取 gorm 实例
 func GormGetter(name string, opts ...client.Option) GormGetterFunc {
 	return func(ctx context.Context) (*gorm.DB, error) {
 		db, err := buffer.GetClient(name, opts)
