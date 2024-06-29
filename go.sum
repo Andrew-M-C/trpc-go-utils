@@ -49,8 +49,8 @@ github.com/Andrew-M-C/go.util/maps v0.0.0-20240508064515-6f76fd3f2e8a h1:WXJPuGr
 github.com/Andrew-M-C/go.util/maps v0.0.0-20240508064515-6f76fd3f2e8a/go.mod h1:IT9nbIw2WGDsLM64/c4kKL8ZyzkshRDlQQhUMNPN84Y=
 github.com/Andrew-M-C/go.util/recovery v0.0.0-20240508064515-6f76fd3f2e8a h1:4bo1PtgUUnvkUclUzH6vOmoAapMYhJ3ktkw5U04yrZ4=
 github.com/Andrew-M-C/go.util/recovery v0.0.0-20240508064515-6f76fd3f2e8a/go.mod h1:Evm/7kb1r0+VUjTespsrcVxSN/HE/6KpkbbidQO0o2o=
-github.com/Andrew-M-C/go.util/runtime v0.0.0-20240508064515-6f76fd3f2e8a h1:YDOtVXccusTFu5r0njpxER9P8+5KxhQbzZ214uJrDwY=
-github.com/Andrew-M-C/go.util/runtime v0.0.0-20240508064515-6f76fd3f2e8a/go.mod h1:gsHMSFGaV6hilcC1i0I9GCognY9cmT0Cj591CFjqzLc=
+github.com/Andrew-M-C/go.util/runtime v0.0.0-20240614030833-e1060da1a642 h1:JmvYOpCEPuzz91jMO3mcK8P4e91MtavH5ykxGU5bLVY=
+github.com/Andrew-M-C/go.util/runtime v0.0.0-20240614030833-e1060da1a642/go.mod h1:gsHMSFGaV6hilcC1i0I9GCognY9cmT0Cj591CFjqzLc=
 github.com/Andrew-M-C/go.util/slice v0.0.0-20240221044053-8b90aa4683c0 h1:jwgZwOHC70wo0ygXPY6GQeDH2MMKrKlKldkmvV5V0UQ=
 github.com/Andrew-M-C/go.util/slice v0.0.0-20240221044053-8b90aa4683c0/go.mod h1:wIie5mijWcGESDf64bIZZmQLdmccBqh9cPTBOXmvKoU=
 github.com/Andrew-M-C/go.util/sync v0.0.0-20240508064515-6f76fd3f2e8a h1:c6a4GA8Caivta666iEOkhgHWaiOGJHLp0TzUwsoczG0=

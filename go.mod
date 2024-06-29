@@ -8,7 +8,7 @@ require (
 	github.com/Andrew-M-C/go.util/ids v0.0.0-20240508064515-6f76fd3f2e8a
 	github.com/Andrew-M-C/go.util/maps v0.0.0-20240508064515-6f76fd3f2e8a
 	github.com/Andrew-M-C/go.util/recovery v0.0.0-20240508064515-6f76fd3f2e8a
-	github.com/Andrew-M-C/go.util/runtime v0.0.0-20240508064515-6f76fd3f2e8a
+	github.com/Andrew-M-C/go.util/runtime v0.0.0-20240614030833-e1060da1a642
 	github.com/Andrew-M-C/go.util/sync v0.0.0-20240508064515-6f76fd3f2e8a
 	github.com/Andrew-M-C/go.util/unsafe v0.0.0-20240508064515-6f76fd3f2e8a
 	github.com/google/uuid v1.6.0
