@@ -115,8 +115,12 @@ func (l *StructuralLogger) Stringer(key string, v fmt.Stringer) *StructuralLogge
 	return l
 }
 
-func (l *StructuralLogger) GoError(err error) *StructuralLogger {
+func (l *StructuralLogger) NamedError(err error) *StructuralLogger {
 	f := zap.Error(err)
 	l.fields = append(l.fields, f)
 	return l
+}
+
+func (l *StructuralLogger) JSON(key string, v any) *StructuralLogger {
+	return l.Stringer(key, ToJSON(v))
 }
