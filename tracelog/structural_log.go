@@ -114,3 +114,9 @@ func (l *StructuralLogger) Stringer(key string, v fmt.Stringer) *StructuralLogge
 	l.fields = append(l.fields, f)
 	return l
 }
+
+func (l *StructuralLogger) GoError(err error) *StructuralLogger {
+	f := zap.Error(err)
+	l.fields = append(l.fields, f)
+	return l
+}
