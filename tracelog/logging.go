@@ -31,6 +31,8 @@ var (
 	Error = log.Error
 )
 
+func Structual() {}
+
 func getStackInfo() fmt.Stringer {
 	callers := caller.GetAllCallers()
 	if len(callers) > 2 {
