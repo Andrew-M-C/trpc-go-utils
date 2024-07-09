@@ -3,6 +3,7 @@ module github.com/Andrew-M-C/trpc-go-utils
 go 1.20
 
 require (
+	github.com/Andrew-M-C/go.jsonvalue v1.3.8
 	github.com/Andrew-M-C/go.util/channel v0.0.0-20240508064515-6f76fd3f2e8a
 	github.com/Andrew-M-C/go.util/errors v0.0.0-20240508064515-6f76fd3f2e8a
 	github.com/Andrew-M-C/go.util/ids v0.0.0-20240508064515-6f76fd3f2e8a
@@ -26,7 +27,6 @@ require (
 
 require (
 	github.com/Andrew-M-C/go-bytesize v0.0.0-20230105080248-c93b078d58b3 // indirect
-	github.com/Andrew-M-C/go.jsonvalue v1.3.8 // indirect
 	github.com/Andrew-M-C/go.objectid v1.0.2 // indirect
 	github.com/Andrew-M-C/go.util/log v0.0.0-20240221044053-8b90aa4683c0 // indirect
 	github.com/Andrew-M-C/go.util/slice v0.0.0-20240221044053-8b90aa4683c0 // indirect
