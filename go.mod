@@ -21,6 +21,7 @@ require (
 	trpc.group/trpc-go/trpc-config-etcd v1.0.0
 	trpc.group/trpc-go/trpc-database/goredis v1.0.0
 	trpc.group/trpc-go/trpc-database/gorm v1.0.0
+	trpc.group/trpc-go/trpc-database/localcache v1.0.0
 	trpc.group/trpc-go/trpc-database/mysql v1.0.0
 	trpc.group/trpc-go/trpc-go v1.0.2
 )
@@ -34,9 +35,11 @@ require (
 	github.com/BurntSushi/toml v0.3.1 // indirect
 	github.com/ClickHouse/ch-go v0.52.1 // indirect
 	github.com/ClickHouse/clickhouse-go/v2 v2.9.1 // indirect
+	github.com/RussellLuo/timingwheel v0.0.0-20191022104228-f534fd34a762 // indirect
 	github.com/andybalholm/brotli v1.0.5 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bwmarrin/snowflake v0.3.0 // indirect
+	github.com/cespare/xxhash v1.1.0 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/coreos/go-semver v0.3.0 // indirect
 	github.com/coreos/go-systemd/v22 v22.3.2 // indirect
