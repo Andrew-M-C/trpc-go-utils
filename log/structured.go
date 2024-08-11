@@ -82,7 +82,7 @@ func (l *logger) String() string {
 	l.v.MustSetString(caller.Func.Base()).At("FUNC")
 
 	s := l.v.MustMarshalString(
-		jsonvalue.OptSetSequence(),
+		jsonvalue.OptKeySequence(internal.keySequence),
 		jsonvalue.OptEscapeSlash(false),
 		jsonvalue.OptUTF8(),
 	)

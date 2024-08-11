@@ -33,8 +33,8 @@ cloud.google.com/go/storage v1.10.0/go.mod h1:FLPqc6j+Ki4BU591ie1oL6qBQGu2Bl/tZ9
 dmitri.shuralyov.com/gpu/mtl v0.0.0-20190408044501-666a987793e9/go.mod h1:H6x//7gZCb22OMCxBHrMx7a5I7Hp++hsVxbQ4BYO7hU=
 github.com/Andrew-M-C/go-bytesize v0.0.0-20230105080248-c93b078d58b3 h1:EEOMYQYkLbcQEfKN9/t3aOKiBD2HZ4lDd+d/aB4754o=
 github.com/Andrew-M-C/go-bytesize v0.0.0-20230105080248-c93b078d58b3/go.mod h1:YJAeUx9w5bqEQJcJXHmm66CU57vK4oNli5skYzl9LXk=
-github.com/Andrew-M-C/go.jsonvalue v1.3.8 h1:hidBZ8hEZsLKEMYQD9v0AZ0zL6S8AZbG6ZHkGZHWGMA=
-github.com/Andrew-M-C/go.jsonvalue v1.3.8/go.mod h1:EsYbZ97LlOhGUs+7qTwZI9KaJrPe6nK8sEZKEqr70Ww=
+github.com/Andrew-M-C/go.jsonvalue v1.4.0 h1:8HHKIAcoARBRb2c/xoX+p6FSJ9eAGOFL3CnZyF7UyWA=
+github.com/Andrew-M-C/go.jsonvalue v1.4.0/go.mod h1:EsYbZ97LlOhGUs+7qTwZI9KaJrPe6nK8sEZKEqr70Ww=
 github.com/Andrew-M-C/go.objectid v1.0.2 h1:F/Eh/VPI4VI4JoXRIkRtJdZD+sDdlp1Tp8HWP1BCmtM=
 github.com/Andrew-M-C/go.objectid v1.0.2/go.mod h1:5xSbrbtY7t5m8WGcyIsV3mk9zL92bxvVaROPZD9YbUM=
 github.com/Andrew-M-C/go.util/channel v0.0.0-20240508064515-6f76fd3f2e8a h1:9MYV8ks35UtN894y58k3+EIlpiVlS07wKFqqJ+VEeJg=

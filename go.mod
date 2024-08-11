@@ -3,7 +3,7 @@ module github.com/Andrew-M-C/trpc-go-utils
 go 1.20
 
 require (
-	github.com/Andrew-M-C/go.jsonvalue v1.3.8
+	github.com/Andrew-M-C/go.jsonvalue v1.4.0
 	github.com/Andrew-M-C/go.util/channel v0.0.0-20240508064515-6f76fd3f2e8a
 	github.com/Andrew-M-C/go.util/errors v0.0.0-20240508064515-6f76fd3f2e8a
 	github.com/Andrew-M-C/go.util/ids v0.0.0-20240508064515-6f76fd3f2e8a
