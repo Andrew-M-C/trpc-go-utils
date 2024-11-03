@@ -27,4 +27,6 @@ func TestLogger(t *testing.T) {
 		ctx = tracelog.WithTraceID(ctx, "another_id")
 		log.FatalContext(ctx, "看看有没有 tracing 和 stack")
 	}
+
+	// log.Fatal("尝试一下 fatal")
 }
