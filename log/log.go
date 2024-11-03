@@ -114,7 +114,7 @@ func Fatalf(f string, v ...any) {
 // DebugContext 输出 debug 级别参数列表日志
 func DebugContext(ctx context.Context, v ...any) {
 	l := newLogger(debugLevel)
-	l.setTracing(ctx)
+	l.ctx = ctx
 	l.args = v
 	log.Debug(l)
 }
@@ -122,7 +122,7 @@ func DebugContext(ctx context.Context, v ...any) {
 // InfoContext 输出 info 级别参数列表日志
 func InfoContext(ctx context.Context, v ...any) {
 	l := newLogger(infoLevel)
-	l.setTracing(ctx)
+	l.ctx = ctx
 	l.args = v
 	log.Info(l)
 }
@@ -130,7 +130,7 @@ func InfoContext(ctx context.Context, v ...any) {
 // WarnContext 输出 warn 级别参数列表日志
 func WarnContext(ctx context.Context, v ...any) {
 	l := newLogger(warnLevel)
-	l.setTracing(ctx)
+	l.ctx = ctx
 	l.args = v
 	log.Warn(l)
 }
@@ -138,7 +138,7 @@ func WarnContext(ctx context.Context, v ...any) {
 // ErrorContext 输出 error 级别参数列表日志
 func ErrorContext(ctx context.Context, v ...any) {
 	l := newLogger(errorLevel)
-	l.setTracing(ctx)
+	l.ctx = ctx
 	l.args = v
 	log.Error(l)
 }
@@ -146,7 +146,7 @@ func ErrorContext(ctx context.Context, v ...any) {
 // FatalContext 输出 fatal 级别参数列表日志
 func FatalContext(ctx context.Context, v ...any) {
 	l := newLogger(fatalLevel)
-	l.setTracing(ctx)
+	l.ctx = ctx
 	l.args = v
 	l.setCallerStacks()
 	log.Fatal(l)
@@ -157,7 +157,7 @@ func FatalContext(ctx context.Context, v ...any) {
 // DebugContextf 格式化输出 debug 级别日志
 func DebugContextf(ctx context.Context, f string, v ...any) {
 	l := newLogger(debugLevel)
-	l.setTracing(ctx)
+	l.ctx = ctx
 	l.setFormatting(f, v)
 	log.Debug(l)
 }
@@ -165,7 +165,7 @@ func DebugContextf(ctx context.Context, f string, v ...any) {
 // InfoContextf 格式化输出 info 级别日志
 func InfoContextf(ctx context.Context, f string, v ...any) {
 	l := newLogger(infoLevel)
-	l.setTracing(ctx)
+	l.ctx = ctx
 	l.setFormatting(f, v)
 	log.Info(l)
 }
@@ -173,7 +173,7 @@ func InfoContextf(ctx context.Context, f string, v ...any) {
 // WarnContextf 格式化输出 warn 级别日志
 func WarnContextf(ctx context.Context, f string, v ...any) {
 	l := newLogger(warnLevel)
-	l.setTracing(ctx)
+	l.ctx = ctx
 	l.setFormatting(f, v)
 	log.Warn(l)
 }
@@ -181,7 +181,7 @@ func WarnContextf(ctx context.Context, f string, v ...any) {
 // ErrorContextf 格式化输出 error 级别日志
 func ErrorContextf(ctx context.Context, f string, v ...any) {
 	l := newLogger(errorLevel)
-	l.setTracing(ctx)
+	l.ctx = ctx
 	l.setFormatting(f, v)
 	log.Error(l)
 }
@@ -189,7 +189,7 @@ func ErrorContextf(ctx context.Context, f string, v ...any) {
 // FatalContextf 格式化输出 fatal 级别日志
 func FatalContextf(ctx context.Context, f string, v ...any) {
 	l := newLogger(fatalLevel)
-	l.setTracing(ctx)
+	l.ctx = ctx
 	l.setFormatting(f, v)
 	log.Fatal(l)
 }

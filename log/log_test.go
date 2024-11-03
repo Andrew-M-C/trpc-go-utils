@@ -2,6 +2,7 @@ package log_test
 
 import (
 	"context"
+	"errors"
 	"os"
 	"testing"
 	"time"
@@ -46,4 +47,15 @@ func TestStructured(t *testing.T) {
 		log.New(ctx).Text("看看有没有 tracing 和 stack").Fatal()
 		log.FatalContext(ctx, "看看有没有 tracing 和 stack")
 	}
+}
+
+func TestContext(t *testing.T) {
+	ctx := context.Background()
+	ctx = log.CtxWithBool(ctx, "context", true)
+	log.InfoContextf(ctx, "看看有没有 context 字段")
+
+	ctx = log.CtxWithInt64(ctx, "double", -12345)
+	log.WarnContextf(ctx, "看看有没有 double 和 context 字段")
+
+	log.New(ctx).Err(errors.New("自定义错误")).Str("msg", "看看有没有 double, context, msg, ERROR 字段").Warn()
 }
