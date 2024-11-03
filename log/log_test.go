@@ -23,10 +23,27 @@ func TestLogger(t *testing.T) {
 	ctx = tracelog.WithTraceID(ctx, "some_id")
 	log.WarnContextf(ctx, "看看有没有 tracing '%v'", tracelog.TraceID(ctx))
 
-	if false {
+	testFatal := false
+	if testFatal {
 		ctx = tracelog.WithTraceID(ctx, "another_id")
 		log.FatalContext(ctx, "看看有没有 tracing 和 stack")
 	}
+	if testFatal {
+		log.Fatal("尝试一下 fatal")
+	}
+}
 
-	// log.Fatal("尝试一下 fatal")
+func TestStructured(t *testing.T) {
+	log.New().Str("msg", "Hello, world!").Debug()
+	log.New().Any("time", time.Now()).Int("int", 1234).Info()
+
+	ctx := context.Background()
+	ctx = tracelog.WithTraceID(ctx, "some_id")
+	log.New(ctx).Text("看看有没有 tracing").Str("trace_id", tracelog.TraceID(ctx)).Warn()
+
+	if false {
+		ctx = tracelog.WithTraceID(ctx, "another_id")
+		log.New(ctx).Text("看看有没有 tracing 和 stack").Fatal()
+		log.FatalContext(ctx, "看看有没有 tracing 和 stack")
+	}
 }
