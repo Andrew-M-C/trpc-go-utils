@@ -242,6 +242,7 @@ func (l *Logger) String() string {
 	s := v.MustMarshalString(
 		jsonvalue.OptSetSequence(),
 		jsonvalue.OptEscapeSlash(false),
+		jsonvalue.OptEscapeHTML(false),
 		jsonvalue.OptUTF8(),
 	)
 	return s
