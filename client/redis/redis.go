@@ -1,4 +1,4 @@
-// Package redis 提供 trpc-database 的 goredis 工具
+// Package redis 提供 trpc-database 的 go-redis 工具
 package redis
 
 import (
