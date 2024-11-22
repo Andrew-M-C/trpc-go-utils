@@ -3,15 +3,14 @@ package tracelog
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"reflect"
 	"time"
 
-	"trpc.group/trpc-go/trpc-go"
+	"github.com/Andrew-M-C/trpc-go-utils/log"
+	"github.com/Andrew-M-C/trpc-go-utils/tracelog/tracing"
 	"trpc.group/trpc-go/trpc-go/codec"
 	"trpc.group/trpc-go/trpc-go/filter"
 	thttp "trpc.group/trpc-go/trpc-go/http"
-	"trpc.group/trpc-go/trpc-go/log"
 )
 
 const (
@@ -46,41 +45,31 @@ func serverFilter(ctx context.Context, req any, next filter.ServerHandleFunc) (r
 	}()
 	metadata := codec.Message(ctx).ServerMetaData()
 	httpReq := thttp.Request(ctx)
+
 	start := time.Now()
 	rsp, err = next(ctx, req)
 	ela := time.Since(start)
 
+	logger := log.New(ctx).
+		Str("caller", caller).
+		Stringer("elapse", ela).
+		Stringer("http_req", ToJSON(httpReq)).
+		Stringer("server_metadata", ToJSON(metadata)).
+		Stringer("req", ToJSON(req)).
+		Stringer("req_type", reflect.TypeOf(req)).
+		Stringer("rsp", ToJSON(rsp)).
+		Stringer("rsp_type", reflect.TypeOf(rsp))
+
 	if err != nil {
-		log.WarnContextf(ctx,
-			`{"caller":%v,"http_req":%v,"server_metadata":%v,`+
-				`"req":%v,"req_type":%v,"rsp":%v,"rsp_type":%v,`+
-				`"cost":"%v","error":%v}`,
-			ToJSON(caller), ToJSON(httpReq), ToJSON(metadata),
-			ToJSON(req), typeString(reflect.TypeOf(req)), ToJSON(rsp), typeString(reflect.TypeOf(rsp)),
-			ela, ToErrJSON(err),
-		)
+		logger.Err(err).Warn()
 	} else {
-		log.DebugContextf(ctx,
-			`{"caller":%v,"http_req":%v,"server_metadata":%v,`+
-				`"req":%v,"req_type":%v,"rsp":%v,"rsp_type":%v,`+
-				`"cost":"%v"}`,
-			ToJSON(caller), ToJSON(httpReq), ToJSON(metadata),
-			ToJSON(req), typeString(reflect.TypeOf(req)), ToJSON(rsp), typeString(reflect.TypeOf(rsp)),
-			ela,
-		)
+		logger.Debug()
 	}
 	return
 }
 
 func clientFilter(ctx context.Context, req, rsp any, next filter.ClientHandleFunc) (err error) {
-	// ctx = EnsureTraceID(ctx)
-	if stack := TraceIDStack(ctx); len(stack) > 0 {
-		b, _ := json.Marshal(stack)
-		trpc.SetMetaData(ctx, TraceIDStackMetadataKey, b)
-	} else {
-		b, _ := json.Marshal([]string{generateTraceID()})
-		trpc.SetMetaData(ctx, TraceIDStackMetadataKey, b)
-	}
+	ctx = tracing.EnsureTraceID(ctx)
 
 	callee := func() string {
 		if addr := codec.Message(ctx).RemoteAddr(); addr != nil {
@@ -90,38 +79,25 @@ func clientFilter(ctx context.Context, req, rsp any, next filter.ClientHandleFun
 	}()
 	metadata := codec.Message(ctx).ServerMetaData()
 	httpReq := thttp.Request(ctx)
+
 	start := time.Now()
 	err = next(ctx, req, rsp)
 	ela := time.Since(start)
 
+	logger := log.New(ctx).
+		Str("callee", callee).
+		Stringer("elapse", ela).
+		Stringer("http_req", ToJSON(httpReq)).
+		Stringer("server_metadata", ToJSON(metadata)).
+		Stringer("req", ToJSON(req)).
+		Stringer("req_type", reflect.TypeOf(req)).
+		Stringer("rsp", ToJSON(rsp)).
+		Stringer("rsp_type", reflect.TypeOf(rsp))
+
 	if err != nil {
-		log.ErrorContextf(ctx,
-			`{"callee":%v,"http_req":%v,"server_metadata":%v,`+
-				`"req":%v,"req_type":%v,"rsp":%v,"rsp_type":%v,`+
-				`"cost":"%v", "error": %v`,
-			ToJSON(callee), ToJSON(httpReq), ToJSON(metadata),
-			ToJSON(req), typeString(reflect.TypeOf(req)), ToJSON(rsp), typeString(reflect.TypeOf(rsp)),
-			ela, ToErrJSON(err),
-		)
+		logger.Err(err).Warn()
 	} else {
-		log.DebugContextf(ctx,
-			`{"callee":%v,"http_req":%v,"server_metadata":%v,`+
-				`"req":%v,"req_type":%v,"rsp":%v,"rsp_type":%v,`+
-				`"cost":"%v"}`,
-			ToJSON(callee), ToJSON(httpReq), ToJSON(metadata),
-			ToJSON(req), typeString(reflect.TypeOf(req)), ToJSON(rsp), typeString(reflect.TypeOf(rsp)),
-			ela,
-		)
+		logger.Debug()
 	}
 	return err
-}
-
-func typeString(t reflect.Type) fmt.Stringer {
-	prefix := ""
-	if t.Kind() == reflect.Pointer {
-		t = t.Elem()
-		prefix = "*"
-	}
-	s := fmt.Sprintf("%s.%s%s", t.PkgPath(), prefix, t.Name())
-	return ToJSONString(s)
 }

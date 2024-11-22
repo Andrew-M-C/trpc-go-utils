@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/Andrew-M-C/go.util/runtime/caller"
-	"trpc.group/trpc-go/trpc-go/log"
+	"github.com/Andrew-M-C/trpc-go-utils/log"
 )
 
 var (
