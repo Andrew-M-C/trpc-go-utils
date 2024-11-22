@@ -121,6 +121,48 @@ func (l *Logger) Uint64(field string, u uint64) *Logger {
 	return l
 }
 
+func (l *Logger) Int32(field string, i int32) *Logger {
+	l.fields = append(l.fields, func(v *jsonvalue.V) {
+		v.MustSetInt32(i).At(field)
+	})
+	return l
+}
+
+func (l *Logger) Uint32(field string, u uint32) *Logger {
+	l.fields = append(l.fields, func(v *jsonvalue.V) {
+		v.MustSetUint32(u).At(field)
+	})
+	return l
+}
+
+func (l *Logger) Int16(field string, i int16) *Logger {
+	l.fields = append(l.fields, func(v *jsonvalue.V) {
+		v.MustSetInt32(int32(i)).At(field)
+	})
+	return l
+}
+
+func (l *Logger) Uint16(field string, u uint16) *Logger {
+	l.fields = append(l.fields, func(v *jsonvalue.V) {
+		v.MustSetUint32(uint32(u)).At(field)
+	})
+	return l
+}
+
+func (l *Logger) Int8(field string, i int8) *Logger {
+	l.fields = append(l.fields, func(v *jsonvalue.V) {
+		v.MustSetInt32(int32(i)).At(field)
+	})
+	return l
+}
+
+func (l *Logger) Uint8(field string, u uint8) *Logger {
+	l.fields = append(l.fields, func(v *jsonvalue.V) {
+		v.MustSetUint32(uint32(u)).At(field)
+	})
+	return l
+}
+
 func (l *Logger) Float32(field string, f float32) *Logger {
 	l.fields = append(l.fields, func(v *jsonvalue.V) {
 		v.MustSetFloat32(f).At(field)
