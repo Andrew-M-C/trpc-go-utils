@@ -7,8 +7,8 @@ import (
 	"time"
 
 	jsonvalue "github.com/Andrew-M-C/go.jsonvalue"
+	"github.com/Andrew-M-C/go.util/log/trace"
 	"github.com/Andrew-M-C/go.util/runtime/caller"
-	"github.com/Andrew-M-C/trpc-go-utils/tracelog/tracing"
 	"trpc.group/trpc-go/trpc-go/log"
 )
 
@@ -277,10 +277,10 @@ func (l *Logger) String() string {
 
 	// tracing
 	if l.ctx != nil {
-		if traceID := tracing.TraceID(l.ctx); traceID != "" {
+		if traceID := trace.TraceID(l.ctx); traceID != "" {
 			v.MustSetString(traceID).At("TRACE_ID")
 		}
-		if history := tracing.TraceIDStack(l.ctx); len(history) > 0 {
+		if history := trace.TraceIDStack(l.ctx); len(history) > 0 {
 			v.MustSet(history).At("TRACE_ID_STACK")
 		}
 	}

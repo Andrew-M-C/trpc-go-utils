@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/Andrew-M-C/go.util/log/trace"
 	"github.com/Andrew-M-C/trpc-go-utils/log"
-	"github.com/Andrew-M-C/trpc-go-utils/tracelog"
 )
 
 func TestMain(m *testing.M) {
@@ -21,12 +21,12 @@ func TestLogger(t *testing.T) {
 	log.Infof("formatting %d - %v", 1234, time.Now())
 
 	ctx := context.Background()
-	ctx = tracelog.WithTraceID(ctx, "some_id")
-	log.WarnContextf(ctx, "看看有没有 tracing '%v'", tracelog.TraceID(ctx))
+	ctx = trace.WithTraceID(ctx, "some_id")
+	log.WarnContextf(ctx, "看看有没有 tracing '%v'", trace.TraceID(ctx))
 
 	testFatal := false
 	if testFatal {
-		ctx = tracelog.WithTraceID(ctx, "another_id")
+		ctx = trace.WithTraceID(ctx, "another_id")
 		log.FatalContext(ctx, "看看有没有 tracing 和 stack")
 	}
 	if testFatal {
@@ -39,11 +39,11 @@ func TestStructured(t *testing.T) {
 	log.New().Any("time", time.Now()).Int("int", 1234).Info()
 
 	ctx := context.Background()
-	ctx = tracelog.WithTraceID(ctx, "some_id")
-	log.New(ctx).Text("看看有没有 tracing").Str("trace_id", tracelog.TraceID(ctx)).Warn()
+	ctx = trace.WithTraceID(ctx, "some_id")
+	log.New(ctx).Text("看看有没有 tracing").Str("trace_id", trace.TraceID(ctx)).Warn()
 
 	if false {
-		ctx = tracelog.WithTraceID(ctx, "another_id")
+		ctx = trace.WithTraceID(ctx, "another_id")
 		log.New(ctx).Text("看看有没有 tracing 和 stack").Fatal()
 		log.FatalContext(ctx, "看看有没有 tracing 和 stack")
 	}
