@@ -18,5 +18,4 @@ use (
 	./naming/mysql
 	./plugin
 	./recovery
-	./tracelog
 )

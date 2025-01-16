@@ -1,4 +1,4 @@
-package tracelog
+package log
 
 import (
 	"context"
@@ -6,8 +6,7 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/Andrew-M-C/trpc-go-utils/log"
-	"github.com/Andrew-M-C/trpc-go-utils/tracelog/tracing"
+	"github.com/Andrew-M-C/go.util/log/trace"
 	"trpc.group/trpc-go/trpc-go/codec"
 	"trpc.group/trpc-go/trpc-go/filter"
 	thttp "trpc.group/trpc-go/trpc-go/http"
@@ -32,9 +31,9 @@ func serverFilter(ctx context.Context, req any, next filter.ServerHandleFunc) (r
 		_ = json.Unmarshal(b, &stack)
 	}
 	if len(stack) == 0 {
-		ctx = EnsureTraceID(ctx)
+		ctx = trace.EnsureTraceID(ctx)
 	} else {
-		ctx = WithTraceIDStack(ctx, stack)
+		ctx = trace.WithTraceIDStack(ctx, stack)
 	}
 
 	caller := func() string {
@@ -50,7 +49,7 @@ func serverFilter(ctx context.Context, req any, next filter.ServerHandleFunc) (r
 	rsp, err = next(ctx, req)
 	ela := time.Since(start)
 
-	logger := log.New(ctx).
+	logger := New(ctx).
 		Str("caller", caller).
 		Stringer("elapse", ela).
 		Stringer("http_req", ToJSON(httpReq)).
@@ -69,7 +68,7 @@ func serverFilter(ctx context.Context, req any, next filter.ServerHandleFunc) (r
 }
 
 func clientFilter(ctx context.Context, req, rsp any, next filter.ClientHandleFunc) (err error) {
-	ctx = tracing.EnsureTraceID(ctx)
+	ctx = trace.EnsureTraceID(ctx)
 
 	callee := func() string {
 		if addr := codec.Message(ctx).RemoteAddr(); addr != nil {
@@ -84,7 +83,7 @@ func clientFilter(ctx context.Context, req, rsp any, next filter.ClientHandleFun
 	err = next(ctx, req, rsp)
 	ela := time.Since(start)
 
-	logger := log.New(ctx).
+	logger := New(ctx).
 		Str("callee", callee).
 		Stringer("elapse", ela).
 		Stringer("http_req", ToJSON(httpReq)).

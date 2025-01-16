@@ -1,4 +1,4 @@
-package tracelog
+package log
 
 import (
 	"encoding/json"

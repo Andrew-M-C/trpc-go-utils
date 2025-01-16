@@ -8,10 +8,10 @@ import (
 	"net"
 	"time"
 
+	"github.com/Andrew-M-C/go.util/log/trace"
 	"github.com/Andrew-M-C/go.util/maps"
 	"github.com/Andrew-M-C/go.util/recovery"
 	"github.com/Andrew-M-C/go.util/runtime/caller"
-	"github.com/Andrew-M-C/trpc-go-utils/tracelog"
 	"trpc.group/trpc-go/trpc-database/mysql"
 	trpc "trpc.group/trpc-go/trpc-go"
 	"trpc.group/trpc-go/trpc-go/log"
@@ -115,7 +115,7 @@ func (r *registerImpl) Register(service string, opts ...registry.Option) (err er
 		lastUpdateTime: &now,
 	}
 	r.nodes.Store(service, node)
-	log.Infof("已注册服务 %s, 节点信息: %v", service, tracelog.ToJSON(trpcNode))
+	log.Infof("已注册服务 %s, 节点信息: %v", service, toJSON{trpcNode})
 
 	return nil
 }
@@ -156,13 +156,13 @@ func (r *registerImpl) doUpdate() {
 	defer recovery.CatchPanic(recovery.WithCallback(func(info any, stack []caller.Caller) {
 		log.Errorf(
 			"registry %s 异常退出, 错误信息: '%v', 堆栈: %v",
-			SelectorName, info, tracelog.ToJSON(stack),
+			SelectorName, info, toJSON{stack},
 		)
 		go r.doUpdate()
 	}))
 
 	for {
-		ctx := tracelog.WithTraceID(context.Background(), fmt.Sprintf(
+		ctx := trace.WithTraceID(context.Background(), fmt.Sprintf(
 			"registry-%s-%s", SelectorName, time.Now().Local().Format("060102150405"),
 		))
 		statement := fmt.Sprintf(

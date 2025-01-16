@@ -7,7 +7,6 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/Andrew-M-C/trpc-go-utils/tracelog"
 	"trpc.group/trpc-go/trpc-go/log"
 	"trpc.group/trpc-go/trpc-go/naming/registry"
 	"trpc.group/trpc-go/trpc-go/naming/selector"
@@ -30,7 +29,7 @@ func (myqlSelector) Select(name string, opts ...selector.Option) (_ *registry.No
 	}()
 
 	// TODO: 支持各种轮询选项
-	log.DebugContextf(ctx, "请求 selector name '%s', 选项: %v", name, tracelog.ToJSON(opt))
+	log.DebugContextf(ctx, "请求 selector name '%s', 选项: %v", name, toJSON{opt})
 
 	// 首先尝试从缓存中查找节点
 	if n := getOneNodeFromCacheAndCheckTimeout(ctx, name, opt); n != nil {
@@ -90,7 +89,7 @@ func (myqlSelector) Report(nod *registry.Node, cost time.Duration, err error) er
 	if err == nil {
 		return nil
 	}
-	log.Infof("RPC 错误, node %v, cost %v, err: %v", tracelog.ToJSON(nod), cost, err)
+	log.Infof("RPC 错误, node %v, cost %v, err: %v", toJSON{nod}, cost, err)
 	nodes, exist := internal.clients.Load(nod.ServiceName)
 	if !exist {
 		return fmt.Errorf("本地无法找到服务 %s", nod.ServiceName)

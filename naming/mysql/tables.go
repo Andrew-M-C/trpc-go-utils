@@ -7,7 +7,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Andrew-M-C/trpc-go-utils/tracelog"
 	"trpc.group/trpc-go/trpc-go/log"
 )
 
@@ -45,7 +44,7 @@ func initTable(ctx context.Context) error {
 			continue
 		}
 		if _, err := proxy.Exec(ctx, s); err != nil {
-			log.ErrorContextf(ctx, "执行 sql 失败, 错误信息: %v, SQL 语句: %v", err, tracelog.ToJSON(s))
+			log.ErrorContextf(ctx, "执行 sql 失败, 错误信息: %v, SQL 语句: %v", err, toJSON{s})
 			return fmt.Errorf("执行初始化命令 #%d 失败: %w", i, err)
 		}
 	}
