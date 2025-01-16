@@ -85,6 +85,9 @@ func (f *errToCodeFilter) setCode(rsp any, code int64) any {
 
 func (f *errToCodeFilter) setMsg(rsp any, msg string) any {
 	typ := reflect.TypeOf(rsp)
+	if typ == nil {
+		return rsp // untyped nil, 无法生成响应
+	}
 	if typ.Kind() != reflect.Pointer || typ.Elem().Kind() != reflect.Struct {
 		return rsp // 不是 *struct 类型, 什么都不做
 	}

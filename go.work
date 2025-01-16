@@ -1,0 +1,22 @@
+go 1.22.0
+
+toolchain go1.23.1
+
+use (
+	./client/buffer
+	./client/gorm
+	./client/kafka
+	./client/localcache
+	./client/redis
+	./client/sqlx
+	./codec
+	./config
+	./config/etcd
+	./errs
+	./log
+	./metrics
+	./naming/mysql
+	./plugin
+	./recovery
+	./tracelog
+)
