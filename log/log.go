@@ -17,6 +17,9 @@ var WithTraceID = trace.WithTraceID
 // TraceID 从 context 中读取 trace ID
 var TraceID = trace.TraceID
 
+// EnsureTraceID 确保 context 中有一个 trace ID
+var EnsureTraceID = trace.EnsureTraceID
+
 // 日志级别设置
 
 // SetLevel 设置日志级别, 参数为 debug, info, warn, error, fatal 这些
