@@ -45,15 +45,22 @@ func (f *errToCodeFilter) serverFilter(ctx context.Context, req any, next filter
 	}
 
 	code, msg := ExtractCodeMessageDigest[int64](err)
-	rsp = f.setCode(rsp, code)
+	rsp, ok := f.setCode(rsp, code)
+	if !ok {
+		return rsp, err
+	}
+
 	rsp = f.setMsg(rsp, msg)
 	return rsp, nil
 }
 
-func (f *errToCodeFilter) setCode(rsp any, code int64) any {
+func (f *errToCodeFilter) setCode(rsp any, code int64) (any, bool) {
 	typ := reflect.TypeOf(rsp)
+	if typ == nil {
+		return rsp, false
+	}
 	if typ.Kind() != reflect.Pointer || typ.Elem().Kind() != reflect.Struct {
-		return rsp // 不是 *struct 类型, 什么都不做
+		return rsp, false // 不是 *struct 类型, 什么都不做
 	}
 
 	val := reflect.ValueOf(rsp)
@@ -72,15 +79,15 @@ func (f *errToCodeFilter) setCode(rsp any, code int64) any {
 		switch field.Kind() {
 		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 			field.SetInt(code)
-			return rsp
+			return rsp, true
 		case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
 			field.SetUint(uint64(code))
-			return rsp
+			return rsp, true
 		default:
 			continue
 		}
 	}
-	return rsp
+	return rsp, false
 }
 
 func (f *errToCodeFilter) setMsg(rsp any, msg string) any {

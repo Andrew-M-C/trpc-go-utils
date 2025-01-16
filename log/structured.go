@@ -8,7 +8,7 @@ import (
 
 	jsonvalue "github.com/Andrew-M-C/go.jsonvalue"
 	"github.com/Andrew-M-C/go.util/runtime/caller"
-	"github.com/Andrew-M-C/trpc-go-utils/tracelog"
+	"github.com/Andrew-M-C/trpc-go-utils/tracelog/tracing"
 	"trpc.group/trpc-go/trpc-go/log"
 )
 
@@ -81,7 +81,11 @@ func (l *Logger) Str(field string, s string) *Logger {
 
 func (l *Logger) Stringer(field string, s fmt.Stringer) *Logger {
 	l.fields = append(l.fields, func(v *jsonvalue.V) {
-		v.MustSetString(s.String()).At(field)
+		if s == nil {
+			v.MustSetNull().At(field)
+		} else {
+			v.MustSetString(s.String()).At(field)
+		}
 	})
 	return l
 }
@@ -273,10 +277,10 @@ func (l *Logger) String() string {
 
 	// tracing
 	if l.ctx != nil {
-		if traceID := tracelog.TraceID(l.ctx); traceID != "" {
+		if traceID := tracing.TraceID(l.ctx); traceID != "" {
 			v.MustSetString(traceID).At("TRACE_ID")
 		}
-		if history := tracelog.TraceIDStack(l.ctx); len(history) > 0 {
+		if history := tracing.TraceIDStack(l.ctx); len(history) > 0 {
 			v.MustSet(history).At("TRACE_ID_STACK")
 		}
 	}
