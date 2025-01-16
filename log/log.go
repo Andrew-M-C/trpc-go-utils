@@ -5,8 +5,17 @@ import (
 	"context"
 	"strings"
 
+	"github.com/Andrew-M-C/go.util/log/trace"
 	"trpc.group/trpc-go/trpc-go/log"
 )
+
+// tracing 配置
+
+// WithTraceID 更新 trace ID
+var WithTraceID = trace.WithTraceID
+
+// TraceID 从 context 中读取 trace ID
+var TraceID = trace.TraceID
 
 // 日志级别设置
 
