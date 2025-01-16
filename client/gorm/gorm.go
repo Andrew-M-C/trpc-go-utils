@@ -5,7 +5,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/Andrew-M-C/trpc-go-utils/client/internal"
+	"github.com/Andrew-M-C/trpc-go-utils/client/buffer"
 	"gorm.io/gorm"
 	trpcgorm "trpc.group/trpc-go/trpc-database/gorm"
 	"trpc.group/trpc-go/trpc-go/client"
@@ -16,7 +16,7 @@ func ClientGetter(
 	name string, opts ...client.Option,
 ) func(context.Context) (*gorm.DB, error) {
 	return func(ctx context.Context) (*gorm.DB, error) {
-		db, err := buffer.GetClient(name, opts)
+		db, err := buff.GetClient(name, opts)
 		if err != nil {
 			return nil, err
 		}
@@ -24,7 +24,7 @@ func ClientGetter(
 	}
 }
 
-var buffer *internal.ClientBuffer[*gorm.DB] = internal.NewClientBuffer(
+var buff *buffer.ClientBuffer[*gorm.DB] = buffer.NewClientBuffer(
 	"amc.utils.gorm.", newGorm, closeGorm,
 )
 

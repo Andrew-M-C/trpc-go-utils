@@ -4,7 +4,7 @@ package redis
 import (
 	"context"
 
-	"github.com/Andrew-M-C/trpc-go-utils/client/internal"
+	"github.com/Andrew-M-C/trpc-go-utils/client/buffer"
 	redis "github.com/redis/go-redis/v9"
 	"trpc.group/trpc-go/trpc-database/goredis"
 	"trpc.group/trpc-go/trpc-go/client"
@@ -15,11 +15,11 @@ func ClientGetter(
 	name string, opts ...client.Option,
 ) func(context.Context) (redis.UniversalClient, error) {
 	return func(ctx context.Context) (redis.UniversalClient, error) {
-		return buffer.GetClient(name, opts)
+		return buff.GetClient(name, opts)
 	}
 }
 
-var buffer *internal.ClientBuffer[redis.UniversalClient] = internal.NewClientBuffer(
+var buff *buffer.ClientBuffer[redis.UniversalClient] = buffer.NewClientBuffer(
 	"amc.utils.redis.", newRedis, closeRedis,
 )
 
