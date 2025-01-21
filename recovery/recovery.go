@@ -3,13 +3,10 @@ package recovery
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
 	"reflect"
 	"strings"
 
 	"github.com/Andrew-M-C/go.util/runtime/caller"
-	"github.com/Andrew-M-C/go.util/unsafe"
 	"github.com/Andrew-M-C/trpc-go-utils/log"
 	"trpc.group/trpc-go/trpc-go/metrics"
 )
@@ -46,16 +43,12 @@ func CatchPanic(opts ...Option) {
 	}
 
 	if opt.errorLog {
-		panicDesc := fmt.Sprint(info)
-		panicType := reflect.TypeOf(info)
-		stackDesc, _ := json.Marshal(stack)
-
-		log.New(ctx).
+		log.New().
 			Text("Panic caught").
-			Stringer("type", panicType).
-			Str("panic", panicDesc).
-			Str("stack", unsafe.BtoS(stackDesc)).
-			Error()
+			With("PANIC_TYPE", reflect.TypeOf(info)).
+			With("PANIC_INFO", info).
+			WithCallerStack().
+			ErrorContext(ctx)
 	}
 	if opt.callback != nil {
 		opt.callback(ctx, info, stack)

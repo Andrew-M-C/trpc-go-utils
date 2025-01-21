@@ -237,7 +237,7 @@ func (l logStringer) String() string {
 	j := jsonvalue.NewObject()
 
 	// 时间
-	j.MustSetString(time.Now().Local().Format("2006-01-02 15:04:05.00000000")).At("TIME")
+	j.MustSetString(time.Now().Local().Format("2006-01-02 15:04:05.000000")).At("TIME")
 
 	// 级别
 	j.MustSetString(l.level).At("LEVEL")
