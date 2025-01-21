@@ -49,20 +49,20 @@ func serverFilter(ctx context.Context, req any, next filter.ServerHandleFunc) (r
 	rsp, err = next(ctx, req)
 	ela := time.Since(start)
 
-	logger := New(ctx).
-		Str("caller", caller).
-		Stringer("elapse", ela).
-		Stringer("http_req", ToJSON(httpReq)).
-		Stringer("server_metadata", ToJSON(metadata)).
-		Stringer("req", ToJSON(req)).
-		Stringer("req_type", reflect.TypeOf(req)).
-		Stringer("rsp", ToJSON(rsp)).
-		Stringer("rsp_type", reflect.TypeOf(rsp))
+	logger := New().
+		With("caller", caller).
+		With("elapse", ela).
+		With("http_req", ToJSON(httpReq)).
+		With("server_metadata", ToJSON(metadata)).
+		With("req", ToJSON(req)).
+		With("req_type", reflect.TypeOf(req)).
+		With("rsp", ToJSON(rsp)).
+		With("rsp_type", reflect.TypeOf(rsp))
 
 	if err != nil {
-		logger.Err(err).Warn()
+		logger.Err(err).WarnContext(ctx)
 	} else {
-		logger.Debug()
+		logger.DebugContext(ctx)
 	}
 	return
 }
@@ -83,20 +83,20 @@ func clientFilter(ctx context.Context, req, rsp any, next filter.ClientHandleFun
 	err = next(ctx, req, rsp)
 	ela := time.Since(start)
 
-	logger := New(ctx).
-		Str("callee", callee).
-		Stringer("elapse", ela).
-		Stringer("http_req", ToJSON(httpReq)).
-		Stringer("server_metadata", ToJSON(metadata)).
-		Stringer("req", ToJSON(req)).
-		Stringer("req_type", reflect.TypeOf(req)).
-		Stringer("rsp", ToJSON(rsp)).
-		Stringer("rsp_type", reflect.TypeOf(rsp))
+	logger := New().
+		With("callee", callee).
+		With("elapse", ela).
+		With("http_req", ToJSON(httpReq)).
+		With("server_metadata", ToJSON(metadata)).
+		With("req", ToJSON(req)).
+		With("req_type", reflect.TypeOf(req)).
+		With("rsp", ToJSON(rsp)).
+		With("rsp_type", reflect.TypeOf(rsp))
 
 	if err != nil {
-		logger.Err(err).Warn()
+		logger.Err(err).WarnContext(ctx)
 	} else {
-		logger.Debug()
+		logger.DebugContext(ctx)
 	}
 	return err
 }

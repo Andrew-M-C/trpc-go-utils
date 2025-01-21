@@ -1,7 +1,9 @@
 package log
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -9,6 +11,7 @@ import (
 	jsonvalue "github.com/Andrew-M-C/go.jsonvalue"
 	"github.com/Andrew-M-C/go.util/log/trace"
 	"github.com/Andrew-M-C/go.util/runtime/caller"
+	"github.com/Andrew-M-C/go.util/unsafe"
 	"trpc.group/trpc-go/trpc-go/log"
 )
 
@@ -20,284 +23,279 @@ const (
 	fatalLevel = "FATAL"
 )
 
-// New 新建一个结构化日志项
-func New(ctx ...context.Context) *Logger {
-	l := newLogger("")
-	if len(ctx) > 0 {
-		l.ctx = ctx[0]
+type loggerKey struct{}
+
+// 往 context 中注入 logger
+func WithLogger(ctx context.Context, l *Logger) context.Context {
+	if l == nil {
+		return ctx
 	}
+	return context.WithValue(ctx, loggerKey{}, l)
+}
+
+// GetLogger 从 context 中读取 logger
+func GetLogger(ctx context.Context) *Logger {
+	v := ctx.Value(loggerKey{})
+	if v == nil {
+		return nil
+	}
+	l, _ := v.(*Logger)
 	return l
+}
+
+// New 新建一个结构化日志项, 即便是 nil 也是可执行的
+func New() *Logger {
+	return nil
 }
 
 func (l *Logger) Debug() {
-	l.level = debugLevel
-	log.Debug(l)
+	debugLog(nil, l) //nolint: staticcheck
+}
+
+func (l *Logger) DebugContext(ctx context.Context) {
+	debugLog(ctx, l)
 }
 
 func (l *Logger) Info() {
-	l.level = infoLevel
-	log.Info(l)
+	infoLog(nil, l) //nolint: staticcheck
+}
+
+func (l *Logger) InfoContext(ctx context.Context) {
+	infoLog(ctx, l)
 }
 
 func (l *Logger) Warn() {
-	l.level = warnLevel
-	log.Warn(l)
+	warnLog(nil, l) //nolint: staticcheck
+}
+
+func (l *Logger) WarnContext(ctx context.Context) {
+	warnLog(ctx, l)
 }
 
 func (l *Logger) Error() {
-	l.level = errorLevel
-	log.Error(l)
+	errorLog(nil, l) //nolint: staticcheck
+}
+
+func (l *Logger) ErrorContext(ctx context.Context) {
+	errorLog(ctx, l)
 }
 
 func (l *Logger) Fatal() {
-	l.level = fatalLevel
-	l.setCallerStacks()
-	log.Fatal(l)
+	fatalLog(nil, l) //nolint: staticcheck
 }
 
-func (l *Logger) Any(field string, v any) *Logger {
-	l.fields = append(l.fields, func(v *jsonvalue.V) {
-		j, err := jsonvalue.Import(v)
-		if err != nil {
-			s := fmt.Sprintf("%+v", v)
-			v.MustSetString(s).At(field)
-		}
-		v.MustSet(j).At(field)
-	})
-	return l
-}
-
-func (l *Logger) Text(s string) *Logger {
-	l.args = []any{s}
-	return l
-}
-
-func (l *Logger) Str(field string, s string) *Logger {
-	l.fields = append(l.fields, func(v *jsonvalue.V) {
-		v.MustSetString(s).At(field)
-	})
-	return l
-}
-
-func (l *Logger) Stringer(field string, s fmt.Stringer) *Logger {
-	l.fields = append(l.fields, func(v *jsonvalue.V) {
-		if s == nil {
-			v.MustSetNull().At(field)
-		} else {
-			v.MustSetString(s.String()).At(field)
-		}
-	})
-	return l
-}
-
-func (l *Logger) Bool(field string, b bool) *Logger {
-	l.fields = append(l.fields, func(v *jsonvalue.V) {
-		v.MustSetBool(b).At(field)
-	})
-	return l
-}
-
-func (l *Logger) Int(field string, i int) *Logger {
-	l.fields = append(l.fields, func(v *jsonvalue.V) {
-		v.MustSetInt(i).At(field)
-	})
-	return l
-}
-
-func (l *Logger) Uint(field string, u uint) *Logger {
-	l.fields = append(l.fields, func(v *jsonvalue.V) {
-		v.MustSetUint(u).At(field)
-	})
-	return l
-}
-
-func (l *Logger) Int64(field string, i int64) *Logger {
-	l.fields = append(l.fields, func(v *jsonvalue.V) {
-		v.MustSetInt64(i).At(field)
-	})
-	return l
-}
-
-func (l *Logger) Uint64(field string, u uint64) *Logger {
-	l.fields = append(l.fields, func(v *jsonvalue.V) {
-		v.MustSetUint64(u).At(field)
-	})
-	return l
-}
-
-func (l *Logger) Int32(field string, i int32) *Logger {
-	l.fields = append(l.fields, func(v *jsonvalue.V) {
-		v.MustSetInt32(i).At(field)
-	})
-	return l
-}
-
-func (l *Logger) Uint32(field string, u uint32) *Logger {
-	l.fields = append(l.fields, func(v *jsonvalue.V) {
-		v.MustSetUint32(u).At(field)
-	})
-	return l
-}
-
-func (l *Logger) Int16(field string, i int16) *Logger {
-	l.fields = append(l.fields, func(v *jsonvalue.V) {
-		v.MustSetInt32(int32(i)).At(field)
-	})
-	return l
-}
-
-func (l *Logger) Uint16(field string, u uint16) *Logger {
-	l.fields = append(l.fields, func(v *jsonvalue.V) {
-		v.MustSetUint32(uint32(u)).At(field)
-	})
-	return l
-}
-
-func (l *Logger) Int8(field string, i int8) *Logger {
-	l.fields = append(l.fields, func(v *jsonvalue.V) {
-		v.MustSetInt32(int32(i)).At(field)
-	})
-	return l
-}
-
-func (l *Logger) Uint8(field string, u uint8) *Logger {
-	l.fields = append(l.fields, func(v *jsonvalue.V) {
-		v.MustSetUint32(uint32(u)).At(field)
-	})
-	return l
-}
-
-func (l *Logger) Float32(field string, f float32) *Logger {
-	l.fields = append(l.fields, func(v *jsonvalue.V) {
-		v.MustSetFloat32(f).At(field)
-	})
-	return l
-}
-
-func (l *Logger) Float64(field string, f float64) *Logger {
-	l.fields = append(l.fields, func(v *jsonvalue.V) {
-		v.MustSetFloat64(f).At(field)
-	})
-	return l
+func (l *Logger) FatalContext(ctx context.Context) {
+	fatalLog(ctx, l)
 }
 
 func (l *Logger) Err(err error) *Logger {
-	l.err = err
-	return l
+	return l.With("ERR", err.Error())
 }
 
+func (l *Logger) Text(txt string) *Logger {
+	return l.With("TEXT", txt)
+}
+
+func (l *Logger) WithJSON(key string, v any) *Logger {
+	return l.With(key, jsonStringer{v})
+}
+
+type jsonStringer struct {
+	v any
+}
+
+func (j jsonStringer) MarshalJSON() ([]byte, error) {
+	b, err := json.Marshal(j.v)
+	if err != nil {
+		s := fmt.Sprintf("%+v", j.v)
+		return unsafe.StoB(s), nil
+	}
+	return b, nil
+}
+
+func (l *Logger) Format(f string, a ...any) *Logger {
+	return l.With("TEXT", formatStringer{f, a})
+}
+
+type formatStringer struct {
+	f string
+	a []any
+}
+
+func (f formatStringer) String() string {
+	return fmt.Sprintf(f.f, f.a...)
+}
+
+func (l *Logger) misc(a ...any) *Logger {
+	return l.With("TEXT", miscStringer(a))
+}
+
+type miscStringer []any
+
+func (s miscStringer) String() string {
+	buff := bytes.Buffer{}
+	for i, a := range s {
+		if i > 0 {
+			buff.WriteRune(' ')
+		}
+		if e, _ := a.(error); e != nil {
+			buff.WriteString(e.Error())
+		} else if s, _ := a.(fmt.Stringer); s != nil {
+			buff.WriteString(s.String())
+		} else {
+			buff.WriteString(fmt.Sprintf("%+v", a))
+		}
+	}
+	return buff.String()
+}
+
+// With 往 logger 中存入结构化字段
+func (l *Logger) With(key string, value any) *Logger {
+	return &Logger{
+		key:   key,
+		value: value,
+		prev:  l,
+	}
+}
+
+// WithCallerStack 往 logger 中存入调用链
+func (l *Logger) WithCallerStack() *Logger {
+	return l.withCallerStack(3) // 这个值要实际测出来
+}
+
+func (l *Logger) withCallerStack(skip int) *Logger {
+	callers := caller.GetAllCallers()
+	if len(callers) > skip {
+		callers = callers[skip:]
+	}
+	return l.WithJSON("CALLER_STACK", callers)
+}
+
+// Logger 结构化 logger
 type Logger struct {
-	ctx context.Context
-
-	level   string
-	callers []caller.Caller
-
-	err error
-
-	fields []func(*jsonvalue.V)
-
-	formatting bool
-	format     string
-	args       []any
-
-	fullCaller bool
+	key   string
+	value any
+	prev  *Logger
 }
 
 // ----------------
 // MARK: 内部实现
 
-func newLogger(level string) *Logger {
-	l := &Logger{
-		level: level,
-	}
-	callers := caller.GetAllCallers()
-	l.callers = callers[3:]
-	return l
+type logStringer struct {
+	ctx    context.Context
+	level  string
+	logger *Logger
 }
 
-func (l *Logger) setFormatting(f string, args []any) {
-	l.formatting = true
-	l.format = f
-	l.args = args
+func debugLog(ctx context.Context, l *Logger) {
+	s := logStringer{
+		ctx:    ctx,
+		level:  "DEBUG",
+		logger: l,
+	}
+	log.Debug(s)
 }
 
-func (l *Logger) setCallerStacks() {
-	l.fullCaller = true
+func infoLog(ctx context.Context, l *Logger) {
+	s := logStringer{
+		ctx:    ctx,
+		level:  "INFO",
+		logger: l,
+	}
+	log.Info(s)
 }
 
-func (l *Logger) String() string {
-	v := jsonvalue.NewObject()
-
-	// time
-	v.MustSetString(time.Now().Local().Format("2006-01-02 15:04:05.000000")).At("TIME")
-
-	// level
-	if l.level != "" {
-		v.MustSetString(l.level).At("LEVEL")
+func warnLog(ctx context.Context, l *Logger) {
+	s := logStringer{
+		ctx:    ctx,
+		level:  "WARN",
+		logger: l,
 	}
+	log.Warn(s)
+}
 
-	// error
-	if l.err != nil {
-		v.MustSetString(l.err.Error()).At("ERROR")
+func errorLog(ctx context.Context, l *Logger) {
+	s := logStringer{
+		ctx:    ctx,
+		level:  "ERROR",
+		logger: l,
 	}
+	log.Error(s)
+}
 
-	// message
-	if l.formatting {
-		msg := fmt.Sprintf(l.format, l.args...)
-		if msg != "" {
-			v.MustSetString(msg).At("TEXT")
+func fatalLog(ctx context.Context, l *Logger) {
+	l = l.withCallerStack(4)
+	s := logStringer{
+		ctx:    ctx,
+		level:  "FATAL",
+		logger: l,
+	}
+	log.Fatal(s)
+}
+
+func (l logStringer) String() string {
+	j := jsonvalue.NewObject()
+
+	// 时间
+	j.MustSetString(time.Now().Local().Format("2006-01-02 15:04:05.00000000")).At("TIME")
+
+	// 级别
+	j.MustSetString(l.level).At("LEVEL")
+
+	// 调用方信息
+	const skip = 10
+	fillCaller(caller.GetCaller(skip), j)
+
+	// 自定义字段
+	var iterateFields func(node *Logger)
+	iterateFields = func(node *Logger) {
+		if node.prev != nil {
+			iterateFields(node.prev)
 		}
-	} else if len(l.args) > 0 {
-		msg := fmt.Sprint(l.args...)
-		if msg != "" {
-			v.MustSetString(msg).At("TEXT")
+		if e, _ := node.value.(error); e != nil {
+			j.MustSetString(e.Error()).At(node.key)
+		} else if m, _ := node.value.(json.Marshaler); m != nil {
+			j.MustSet(m).At(node.key)
+		} else if s, _ := node.value.(fmt.Stringer); s != nil {
+			j.MustSetString(s.String()).At(node.key)
+		} else {
+			j.MustSet(node.value).At(node.key)
 		}
 	}
-
-	// fields
-	for _, fu := range l.fields {
-		fu(v)
-	}
-
-	// fields in ctx
-	extractCtxKVs(l.ctx, v)
-
-	// stack for fatal
-	if l.fullCaller {
-		v.MustSet(l.callers).At("STACK")
-	}
-
-	// callers
-	if len(l.callers) > 0 {
-		caller := l.callers[0]
-		v.MustSetString(getFile(caller.File)).At("FILE")
-		v.MustSetInt(caller.Line).At("LINE")
-		v.MustSetString(caller.Func.Name()).At("FUNC")
-	}
-
-	// tracing
 	if l.ctx != nil {
-		if traceID := trace.TraceID(l.ctx); traceID != "" {
-			v.MustSetString(traceID).At("TRACE_ID")
+		if lg := GetLogger(l.ctx); lg != nil {
+			iterateFields(lg)
 		}
-		if history := trace.TraceIDStack(l.ctx); len(history) > 0 {
-			v.MustSet(history).At("TRACE_ID_STACK")
+	}
+	if l.logger != nil {
+		iterateFields(l.logger)
+	}
+
+	// trace ID
+	if ctx := l.ctx; ctx != nil {
+		if traceID := trace.TraceID(ctx); traceID != "" {
+			j.MustSetString(traceID).At("TRACE_ID")
+		}
+		if history := trace.TraceIDStack(ctx); len(history) > 0 {
+			j.MustSet(history).At("TRACE_ID_STACK")
 		}
 	}
 
-	s := v.MustMarshalString(
+	// 序列化返回
+	return j.MustMarshalString(
 		jsonvalue.OptSetSequence(),
 		jsonvalue.OptEscapeSlash(false),
 		jsonvalue.OptEscapeHTML(false),
 		jsonvalue.OptUTF8(),
 	)
-	return s
 }
 
-func getFile(f caller.File) string {
-	parts := strings.Split(string(f), "/")
+func fillCaller(c caller.Caller, j *jsonvalue.V) {
+	parts := strings.Split(string(c.File), "/")
 	if len(parts) > 3 {
 		parts = parts[len(parts)-3:]
 	}
-	return strings.Join(parts, "/")
+	j.MustSetString(strings.Join(parts, "/")).At("FILE")
+	j.MustSetInt(c.Line).At("LINE")
+	j.MustSetString(c.Func.Base()).At("FUNC")
 }
