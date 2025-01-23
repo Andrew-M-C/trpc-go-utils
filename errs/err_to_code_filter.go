@@ -5,6 +5,7 @@ import (
 	"reflect"
 	"strings"
 
+	"github.com/Andrew-M-C/trpc-go-utils/log"
 	"github.com/Andrew-M-C/trpc-go-utils/plugin"
 	"trpc.group/trpc-go/trpc-go/filter"
 )
@@ -51,6 +52,7 @@ func (f *errToCodeFilter) serverFilter(ctx context.Context, req any, next filter
 	}
 
 	rsp = f.setMsg(rsp, msg)
+	log.New().Text("err_to_code 转换").With("code", code).With("msg", msg).Err(err).WarnContext(ctx)
 	return rsp, nil
 }
 

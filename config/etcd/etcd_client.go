@@ -33,10 +33,7 @@ func RegisterClientProvider(ctx context.Context, s *server.Server, key string) e
 		ctx, API{}, configutil.YAML, key,
 	)
 	if err != nil {
-		return fmt.Errorf(
-			"%w: watch config %s error: '%v'",
-			ErrClientYAML, key, err,
-		)
+		return fmt.Errorf("%w: watch config %s error: '%v'", ErrClientYAML, key, err)
 	}
 
 	updateClientYAML(newConfig.Client)
