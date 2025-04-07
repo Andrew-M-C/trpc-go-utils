@@ -3,6 +3,7 @@ module github.com/Andrew-M-C/trpc-go-utils/client/sqlx
 go 1.22
 
 require (
+	github.com/jmoiron/sqlx v1.3.5
 	trpc.group/trpc-go/trpc-database/mysql v1.0.0
 	trpc.group/trpc-go/trpc-go v1.0.3
 )
@@ -19,7 +20,6 @@ require (
 	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/hashicorp/errwrap v1.0.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
-	github.com/jmoiron/sqlx v1.3.5 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.16.6 // indirect
 	github.com/kr/pretty v0.3.0 // indirect
