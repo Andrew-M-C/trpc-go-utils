@@ -13,19 +13,37 @@ import (
 const (
 	// Filter 名称
 	ErrToCodeFilterName = "err_to_code"
+	CodeToFilterName    = "code_to_err"
 	// Plugin 配置类型, 用于指定 json tag
 	ErrToCodePluginType = "filter"
 	// Plugin 配置名
 	ErrToCodePluginName = "err_to_code"
 )
 
+// ErrorCodeMsgSetterFunc 表示当提取出错误时, 可以回调给业务方进行 set 操作。如果没有这个
+// setter 的话, filter 会自行使用反射进行设置。
+//
+// 返回 true 表示已经设置 OK, 否则 filter 会继续往下走继续使用反射逻辑进行设置
+type ErrorCodeMsgSetterFunc func(ctx context.Context, rsp any, code int, msg string) bool
+
 // RegisterErrToCodeFilter 注册 err_to_code filter, 该 filter 可以将 tRPC 函数实现中
 // 返回的 err 类型转换为 response 中的 code / message 字段, 也可以作为 client filter,
 // 将 code / message 数据提取出来, 放在 err 字段中, 让 RPC 的调用方和实现方对 RPC 可以有
 // 如函数调用般的体验, 可以只判断 error 类型字段而无需再判断 rsp 中的 code 字段。
+//
+// 必须在 trpc.NewServer 之前调用
 func RegisterErrToCodeFilter() {
+	internal.filterInitOnce.Do(registerAndBindConfig)
+}
+
+func registerAndBindConfig() {
 	filter.Register(
 		ErrToCodeFilterName,
+		internal.filterSingleton.serverFilter,
+		internal.filterSingleton.clientFilter,
+	)
+	filter.Register(
+		CodeToFilterName,
 		internal.filterSingleton.serverFilter,
 		internal.filterSingleton.clientFilter,
 	)
@@ -35,18 +53,40 @@ func RegisterErrToCodeFilter() {
 	)
 }
 
+// SetServerErrorCodeMsgSetter 设置在 err_to_code filter 中, 当提取出错误时, 的回调函数。
+// 业务方可以使用这个回调进行 set 操作。如果没有这个 setter 的话, filter 会自行使用反射进行设置。
+//
+// 返回 true 表示已经设置 OK, 否则 filter 会继续往下走继续使用反射逻辑进行设置
+func SetServerErrorCodeMsgSetter(fu ErrorCodeMsgSetterFunc) {
+	if fu != nil {
+		internal.filterSingleton.errorCodeMsgSetter = fu
+	}
+}
+
 type errToCodeFilter struct {
 	conf errToCodeConfig
+
+	errorCodeMsgSetter ErrorCodeMsgSetterFunc
 }
 
 func (f *errToCodeFilter) serverFilter(ctx context.Context, req any, next filter.ServerHandleFunc) (any, error) {
 	rsp, err := next(ctx, req)
 	if err == nil {
-		return rsp, err
+		return rsp, err // 没有错误, 那么直接返回
 	}
 
 	code, msg := ExtractCodeMessageDigest[int64](err)
-	rsp, ok := f.setCode(rsp, code)
+	rsp, ok := ensureAlloc(ctx, rsp)
+	if !ok {
+		return rsp, err
+	}
+	if setter := f.errorCodeMsgSetter; setter != nil {
+		if done := setter(ctx, rsp, int(code), msg); done {
+			return rsp, err
+		}
+	}
+
+	rsp, ok = f.setCode(ctx, rsp, code)
 	if !ok {
 		return rsp, err
 	}
@@ -56,20 +96,13 @@ func (f *errToCodeFilter) serverFilter(ctx context.Context, req any, next filter
 	return rsp, nil
 }
 
-func (f *errToCodeFilter) setCode(rsp any, code int64) (any, bool) {
-	typ := reflect.TypeOf(rsp)
-	if typ == nil {
+func (f *errToCodeFilter) setCode(ctx context.Context, rsp any, code int64) (any, bool) {
+	rsp, ok := ensureAlloc(ctx, rsp)
+	if !ok {
 		return rsp, false
-	}
-	if typ.Kind() != reflect.Pointer || typ.Elem().Kind() != reflect.Struct {
-		return rsp, false // 不是 *struct 类型, 什么都不做
 	}
 
 	val := reflect.ValueOf(rsp)
-	if val.IsNil() {
-		val = reflect.New(typ.Elem())
-		rsp = val.Interface()
-	}
 
 	for i := 0; i < val.Elem().NumField(); i++ {
 		tag := getJSONTag(val.Elem().Type().Field(i))
@@ -80,15 +113,18 @@ func (f *errToCodeFilter) setCode(rsp any, code int64) (any, bool) {
 		field := val.Elem().Field(i)
 		switch field.Kind() {
 		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+			log.New().Text("设置返回 code 值").With("code", code).With("field", field).DebugContext(ctx)
 			field.SetInt(code)
 			return rsp, true
 		case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+			log.New().Text("设置返回 code 值").With("code", code).With("field", field).DebugContext(ctx)
 			field.SetUint(uint64(code))
 			return rsp, true
 		default:
 			continue
 		}
 	}
+	log.New().Text("没有合法的 field 值可供设置, 放弃").With("code", code).DebugContext(ctx)
 	return rsp, false
 }
 
