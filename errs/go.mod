@@ -6,7 +6,7 @@ toolchain go1.23.5
 
 require (
 	github.com/Andrew-M-C/go.util/errors v0.0.0-20250116061329-8e3db2afac06
-	github.com/Andrew-M-C/trpc-go-utils/log v0.0.0-20250121140935-ca9919c1ec4b
+	github.com/Andrew-M-C/trpc-go-utils/log v0.0.0-20250918051536-fbd41bfce55d
 	github.com/Andrew-M-C/trpc-go-utils/plugin v0.0.0-20250116072106-212bb22d96bb
 	github.com/smartystreets/goconvey v1.8.1
 	golang.org/x/exp v0.0.0-20250106191152-7588d65b2ba8
