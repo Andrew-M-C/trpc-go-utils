@@ -5,13 +5,13 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"slices"
 	"strings"
 	"time"
 
 	jsonvalue "github.com/Andrew-M-C/go.jsonvalue"
 	"github.com/Andrew-M-C/go.util/log/trace"
 	"github.com/Andrew-M-C/go.util/runtime/caller"
-	"github.com/Andrew-M-C/go.util/slice"
 	"github.com/Andrew-M-C/go.util/unsafe"
 	"trpc.group/trpc-go/trpc-go/log"
 )
@@ -295,7 +295,7 @@ func (l logStringer) String() string {
 	)
 
 	if len(textFields) > 0 {
-		slice.Reverse(textFields)
+		slices.Reverse(textFields)
 		return strings.Join(textFields, " ") + "\t" + fields
 	}
 	return fields
