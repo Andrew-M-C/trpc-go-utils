@@ -52,17 +52,17 @@ func serverFilter(ctx context.Context, req any, next filter.ServerHandleFunc) (r
 	logger := New().
 		With("caller", caller).
 		With("elapse", ela).
-		With("http_req", ToJSON(httpReq)).
-		With("server_metadata", ToJSON(metadata)).
-		With("req", ToJSON(req)).
+		WithJSON("http_req", httpReq).
+		WithJSON("server_metadata", metadata).
+		WithJSON("req", req).
 		With("req_type", reflect.TypeOf(req)).
-		With("rsp", ToJSON(rsp)).
+		WithJSON("rsp", rsp).
 		With("rsp_type", reflect.TypeOf(rsp))
 
 	if err != nil {
-		logger.Err(err).WarnContext(ctx)
+		logger.Text("server 返回失败").Err(err).WarnContext(ctx)
 	} else {
-		logger.DebugContext(ctx)
+		logger.Text("server 返回成功").DebugContext(ctx)
 	}
 	return
 }
@@ -86,17 +86,17 @@ func clientFilter(ctx context.Context, req, rsp any, next filter.ClientHandleFun
 	logger := New().
 		With("callee", callee).
 		With("elapse", ela).
-		With("http_req", ToJSON(httpReq)).
-		With("server_metadata", ToJSON(metadata)).
-		With("req", ToJSON(req)).
+		WithJSON("http_req", httpReq).
+		WithJSON("server_metadata", metadata).
+		WithJSON("req", req).
 		With("req_type", reflect.TypeOf(req)).
-		With("rsp", ToJSON(rsp)).
+		WithJSON("rsp", rsp).
 		With("rsp_type", reflect.TypeOf(rsp))
 
 	if err != nil {
-		logger.Err(err).WarnContext(ctx)
+		logger.Text("client 返回失败").Err(err).WarnContext(ctx)
 	} else {
-		logger.DebugContext(ctx)
+		logger.Text("client 返回成功").DebugContext(ctx)
 	}
 	return err
 }
