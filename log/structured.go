@@ -93,7 +93,7 @@ func (l *Logger) Err(err error) *Logger {
 }
 
 func (l *Logger) Text(txt string) *Logger {
-	return l.With("TEXT", txt)
+	return l.With("", txt)
 }
 
 func (l *Logger) WithJSON(key string, v any) *Logger {
@@ -114,7 +114,7 @@ func (j jsonStringer) MarshalJSON() ([]byte, error) {
 }
 
 func (l *Logger) Format(f string, a ...any) *Logger {
-	return l.With("TEXT", formatStringer{f, a})
+	return l.With("", formatStringer{f, a})
 }
 
 type formatStringer struct {
@@ -127,7 +127,7 @@ func (f formatStringer) String() string {
 }
 
 func (l *Logger) misc(a ...any) *Logger {
-	return l.With("TEXT", miscStringer(a))
+	return l.With("", miscStringer(a))
 }
 
 type miscStringer []any
@@ -247,19 +247,23 @@ func (l logStringer) String() string {
 	fillCaller(caller.GetCaller(skip), j)
 
 	// 自定义字段
-	var iterateFields func(node *Logger)
-	iterateFields = func(node *Logger) {
-		if node.prev != nil {
-			iterateFields(node.prev)
-		}
-		if e, _ := node.value.(error); e != nil {
-			j.MustSetString(e.Error()).At(node.key)
-		} else if m, _ := node.value.(json.Marshaler); m != nil {
-			j.MustSet(m).At(node.key)
-		} else if s, _ := node.value.(fmt.Stringer); s != nil {
-			j.MustSetString(s.String()).At(node.key)
-		} else {
-			j.MustSet(node.value).At(node.key)
+	var textFields []string
+
+	iterateFields := func(node *Logger) {
+		for ; node != nil; node = node.prev {
+			if node.key == "" {
+				textFields = append(textFields, fmt.Sprint(node.value))
+				continue
+			}
+			if e, _ := node.value.(error); e != nil {
+				j.MustSetString(e.Error()).At(node.key)
+			} else if m, _ := node.value.(json.Marshaler); m != nil {
+				j.MustSet(m).At(node.key)
+			} else if s, _ := node.value.(fmt.Stringer); s != nil {
+				j.MustSetString(s.String()).At(node.key)
+			} else {
+				j.MustSet(node.value).At(node.key)
+			}
 		}
 	}
 	if l.ctx != nil {
@@ -282,12 +286,17 @@ func (l logStringer) String() string {
 	}
 
 	// 序列化返回
-	return j.MustMarshalString(
+	fields := j.MustMarshalString(
 		jsonvalue.OptSetSequence(),
 		jsonvalue.OptEscapeSlash(false),
 		jsonvalue.OptEscapeHTML(false),
 		jsonvalue.OptUTF8(),
 	)
+
+	if len(textFields) > 0 {
+		return strings.Join(textFields, " ") + "\t" + fields
+	}
+	return fields
 }
 
 func fillCaller(c caller.Caller, j *jsonvalue.V) {
