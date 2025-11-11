@@ -2,8 +2,8 @@ github.com/Andrew-M-C/go.jsonvalue v1.4.1 h1:MGtqaKy5Z7Xi/hnWaeqWDMwno79uNRt0XoC
 github.com/Andrew-M-C/go.jsonvalue v1.4.1/go.mod h1:EsYbZ97LlOhGUs+7qTwZI9KaJrPe6nK8sEZKEqr70Ww=
 github.com/Andrew-M-C/go.objectid v1.0.3 h1:JRqELpahHp+pVkFA9qEUxBUZSZkwNWAeSDmcP3I9uF4=
 github.com/Andrew-M-C/go.objectid v1.0.3/go.mod h1:8/PONmvWI/hT3JSb4rRjIp1ZxozPVJv4g1jHHt0fAZ0=
-github.com/Andrew-M-C/go.util/log v0.0.0-20250116061329-8e3db2afac06 h1:NNZtdQWMPR36Y3zeELNcAhw2e/1uYEBTLttzcbqvD6Y=
-github.com/Andrew-M-C/go.util/log v0.0.0-20250116061329-8e3db2afac06/go.mod h1:hHRNsYKMeVEqQv4ml56XFmgxBSDy6UIE2T25sUGEJZY=
+github.com/Andrew-M-C/go.util/log v0.0.0-20251111084840-655d831cc1cf h1:EBezQtWPgBnz4dTI5vF9Y8Vj+OwNQ2jAPyjJ9xsEklA=
+github.com/Andrew-M-C/go.util/log v0.0.0-20251111084840-655d831cc1cf/go.mod h1:hHRNsYKMeVEqQv4ml56XFmgxBSDy6UIE2T25sUGEJZY=
 github.com/Andrew-M-C/go.util/runtime v0.0.0-20250116061329-8e3db2afac06 h1:hEoV67wWg9ftqChbiBziH+prlBZZzd7yG9pq5KPNmrs=
 github.com/Andrew-M-C/go.util/runtime v0.0.0-20250116061329-8e3db2afac06/go.mod h1:kJiPh+FBcZwYYNieNKIdunC/1i/iyNOGJTBKBxOB2Pw=
 github.com/Andrew-M-C/go.util/unsafe v0.0.0-20250116061329-8e3db2afac06 h1:iikOmz0hMsl6/7C+yCj9xSHSye4GVZ4i5hb3X309CGM=

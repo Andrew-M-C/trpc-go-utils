@@ -5,7 +5,7 @@ github.com/Andrew-M-C/go.objectid v1.0.3 h1:JRqELpahHp+pVkFA9qEUxBUZSZkwNWAeSDmc
 github.com/Andrew-M-C/go.objectid v1.0.3/go.mod h1:8/PONmvWI/hT3JSb4rRjIp1ZxozPVJv4g1jHHt0fAZ0=
 github.com/Andrew-M-C/go.util/constraints v0.0.0-20241118072554-b6cba35b72fb h1:xlUr4Ho/izqfjnnAEnsAT8D/Lv/CtlQHqSLWnpyAOEM=
 github.com/Andrew-M-C/go.util/constraints v0.0.0-20241118072554-b6cba35b72fb/go.mod h1:kwwhHyN9ZZcCZ9xN3KJ2nw+URJJ2JV0Jkl9WRrR4jxQ=
-github.com/Andrew-M-C/go.util/log v0.0.0-20250116061329-8e3db2afac06 h1:NNZtdQWMPR36Y3zeELNcAhw2e/1uYEBTLttzcbqvD6Y=
+github.com/Andrew-M-C/go.util/log v0.0.0-20251111084840-655d831cc1cf h1:EBezQtWPgBnz4dTI5vF9Y8Vj+OwNQ2jAPyjJ9xsEklA=
 github.com/Andrew-M-C/go.util/maps v0.0.0-20250116061329-8e3db2afac06 h1:xvWGj8xejET2Wkq3iLd+Wmg/tp5dIFURajI1sYfjdtQ=
 github.com/Andrew-M-C/go.util/maps v0.0.0-20250116061329-8e3db2afac06/go.mod h1:tGSf4z1Lj0Lwaic2JfE1lJwGEGWPTsts2ZNMNJ3TnQY=
 github.com/Andrew-M-C/go.util/recovery v0.0.0-20250116061329-8e3db2afac06 h1:XkvjxizKtkKMVJLvOFfJi1L+EtsxKEBGFfFkE7Vlrko=
