@@ -20,7 +20,7 @@ func Register[T any](typ, name string, receiver func(*T) error, opts ...Option) 
 
 // Bind 将 plugins 配置与本地存储绑定
 func Bind[T any](typ, name string, target *T) {
-	Register[T](typ, name, func(t *T) error {
+	Register(typ, name, func(t *T) error {
 		*target = *t
 		return nil
 	})

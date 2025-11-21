@@ -5,9 +5,9 @@ go 1.23.0
 toolchain go1.23.5
 
 require (
-	github.com/Andrew-M-C/go.jsonvalue v1.4.1
+	github.com/Andrew-M-C/go.jsonvalue v1.4.2
 	github.com/Andrew-M-C/go.util/log v0.0.0-20251111084840-655d831cc1cf
-	github.com/Andrew-M-C/go.util/runtime v0.0.0-20250116061329-8e3db2afac06
+	github.com/Andrew-M-C/go.util/runtime v0.0.0-20251120101424-fd2377cf6964
 	github.com/Andrew-M-C/go.util/unsafe v0.0.0-20250116061329-8e3db2afac06
 	trpc.group/trpc-go/trpc-go v1.0.3
 )

@@ -8,7 +8,7 @@ require (
 	github.com/Andrew-M-C/go.util/log v0.0.0-20251111084840-655d831cc1cf
 	github.com/Andrew-M-C/go.util/maps v0.0.0-20250116061329-8e3db2afac06
 	github.com/Andrew-M-C/go.util/recovery v0.0.0-20250116061329-8e3db2afac06
-	github.com/Andrew-M-C/go.util/runtime v0.0.0-20250116061329-8e3db2afac06
+	github.com/Andrew-M-C/go.util/runtime v0.0.0-20251120101424-fd2377cf6964
 	trpc.group/trpc-go/trpc-database/mysql v1.0.0
 	trpc.group/trpc-go/trpc-go v1.0.3
 )

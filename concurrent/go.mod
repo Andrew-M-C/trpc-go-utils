@@ -10,9 +10,9 @@ require (
 )
 
 require (
-	github.com/Andrew-M-C/go.jsonvalue v1.4.1 // indirect
+	github.com/Andrew-M-C/go.jsonvalue v1.4.2 // indirect
 	github.com/Andrew-M-C/go.objectid v1.0.3 // indirect
-	github.com/Andrew-M-C/go.util/runtime v0.0.0-20250116061329-8e3db2afac06 // indirect
+	github.com/Andrew-M-C/go.util/runtime v0.0.0-20251120101424-fd2377cf6964 // indirect
 	github.com/Andrew-M-C/go.util/unsafe v0.0.0-20250116061329-8e3db2afac06 // indirect
 	github.com/BurntSushi/toml v1.5.0 // indirect
 	github.com/andybalholm/brotli v1.1.1 // indirect
