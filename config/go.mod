@@ -13,6 +13,7 @@ require (
 	github.com/Andrew-M-C/trpc-go-utils/recovery v0.0.0-20251111090641-9d6484c774e6
 	github.com/fsnotify/fsnotify v1.9.0
 	github.com/google/uuid v1.6.0
+	github.com/smartystreets/goconvey v1.8.1
 	gopkg.in/yaml.v3 v3.0.1
 	trpc.group/trpc-go/trpc-go v1.0.3
 )
@@ -26,9 +27,11 @@ require (
 	github.com/go-playground/form/v4 v4.2.0 // indirect
 	github.com/golang/snappy v1.0.0 // indirect
 	github.com/google/flatbuffers v25.2.10+incompatible // indirect
+	github.com/gopherjs/gopherjs v1.17.2 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
+	github.com/jtolds/gls v4.20.0+incompatible // indirect
 	github.com/klauspost/compress v1.18.0 // indirect
 	github.com/lestrrat-go/strftime v1.1.0 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
@@ -38,6 +41,7 @@ require (
 	github.com/petermattis/goid v0.0.0-20240813172612-4fcff4a6cae7 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/shopspring/decimal v1.4.0 // indirect
+	github.com/smarty/assertions v1.15.0 // indirect
 	github.com/spf13/cast v1.7.1 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.61.0 // indirect
