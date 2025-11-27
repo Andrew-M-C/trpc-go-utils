@@ -4,6 +4,7 @@ package concurrent
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/Andrew-M-C/trpc-go-utils/log"
 	"github.com/Andrew-M-C/trpc-go-utils/recovery"
@@ -14,11 +15,12 @@ import (
 // Detach 分离一个新的后台任务, 不等待其返回
 func Detach(ctx context.Context, task func(context.Context), recoveryOpts ...recovery.Option) {
 	newCtx, _ := codec.WithCloneContextAndMessage(ctx)
-	copyContextValues(newCtx, ctx)
+	newCtx = copyContextValues(newCtx, ctx)
 
 	recoveryOpts = append(recoveryOpts, recovery.WithContext(ctx))
 	if id := log.TraceID(ctx); id != "" {
-		newCtx = log.WithTraceID(newCtx, "concurrent.detach")
+		detachTraceID := "detach-" + time.Now().Format("0102-150405")
+		newCtx = log.WithTraceID(newCtx, detachTraceID)
 	}
 
 	go func() {

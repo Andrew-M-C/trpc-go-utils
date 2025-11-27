@@ -18,11 +18,12 @@ func RegisterContextKeyWhenDetach(key any) {
 	internal.contextKeys.Store(key, struct{}{})
 }
 
-func copyContextValues(to, from context.Context) {
-	internal.contextKeys.Range(func(key, value any) bool {
+func copyContextValues(to, from context.Context) context.Context {
+	internal.contextKeys.Range(func(key, _ any) bool {
 		if v := from.Value(key); v != nil {
-			to.Value(key)
+			to = context.WithValue(to, key, v)
 		}
 		return true
 	})
+	return to
 }
