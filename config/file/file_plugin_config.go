@@ -27,7 +27,7 @@ func (pluginFactory) Setup(name string, decoder plugin.Decoder) error {
 	if err := decoder.Decode(&internal.configs); err != nil {
 		return fmt.Errorf("decode config %s error: '%w'", name, err)
 	}
-	log.Debugf("解析 plugin %s 成功, 配置: %+v", name, internal.configs)
+	log.Infof("解析 plugin %s 成功, 配置: %+v", name, internal.configs)
 	return nil
 }
 
