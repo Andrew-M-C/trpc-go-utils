@@ -1,6 +1,11 @@
 package file
 
-import "trpc.group/trpc-go/trpc-go/plugin"
+import (
+	"fmt"
+
+	"trpc.group/trpc-go/trpc-go/log"
+	"trpc.group/trpc-go/trpc-go/plugin"
+)
 
 type pluginConfigItem struct {
 	Name string `yaml:"name"`
@@ -18,7 +23,12 @@ func (pluginFactory) Type() string {
 }
 
 func (pluginFactory) Setup(name string, decoder plugin.Decoder) error {
-	return decoder.Decode(&internal.configs)
+	log.Debugf("开始解析 plugin %s", name)
+	if err := decoder.Decode(&internal.configs); err != nil {
+		return fmt.Errorf("decode config %s error: '%w'", name, err)
+	}
+	log.Debugf("解析 plugin %s 成功, 配置: %+v", name, internal.configs)
+	return nil
 }
 
 func findConfigItem(name string) (pluginConfigItem, bool) {
