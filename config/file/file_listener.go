@@ -82,7 +82,7 @@ func (l *fileListener) doWatch() {
 func (l *fileListener) handleFileChange(ev fsnotify.Event) {
 	logger := log.New().With("name", l.key).With("path", l.path).With("op", ev.Op)
 
-	if ev.Has(fsnotify.Write) {
+	if eventsShouldCheck(ev) {
 		b, err := os.ReadFile(l.path)
 		if err != nil {
 			logger.Err(err).Text("读取文件内容失败").Error()
@@ -108,4 +108,9 @@ func (l *fileListener) handleFileChange(ev fsnotify.Event) {
 	}
 
 	logger.Text("无需关注的文件变更类型").Info()
+}
+
+func eventsShouldCheck(ev fsnotify.Event) bool {
+	return ev.Has(fsnotify.Write) ||
+		ev.Has(fsnotify.Rename) // 测试发现 vim 编辑是一个 rename 的变化
 }
