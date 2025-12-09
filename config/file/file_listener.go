@@ -106,8 +106,6 @@ func (l *fileListener) handleFileChange(ev fsnotify.Event) {
 		}
 		l.ch <- c
 	}
-
-	logger.Text("无需关注的文件变更类型").Info()
 }
 
 func eventsShouldCheck(ev fsnotify.Event) bool {
