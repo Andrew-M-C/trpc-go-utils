@@ -39,3 +39,22 @@ func findConfigItem(name string) (pluginConfigItem, bool) {
 	}
 	return pluginConfigItem{}, false
 }
+
+// 用于外部调试
+type ConfigItem struct {
+	Name string
+	Path string
+}
+
+// GetAllConfigs 返回所有配置供外部调试
+func GetAllConfigs() []ConfigItem {
+	in := internal.configs
+	res := make([]ConfigItem, 0, len(in))
+	for _, from := range in {
+		res = append(res, ConfigItem{
+			Name: from.Name,
+			Path: from.Path,
+		})
+	}
+	return res
+}
