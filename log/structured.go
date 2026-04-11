@@ -50,7 +50,7 @@ func New() *Logger {
 }
 
 func (l *Logger) Debug() {
-	debugLog(nil, l) //nolint: staticcheck
+	debugLog(context.Background(), l)
 }
 
 func (l *Logger) DebugContext(ctx context.Context) {
@@ -58,7 +58,7 @@ func (l *Logger) DebugContext(ctx context.Context) {
 }
 
 func (l *Logger) Info() {
-	infoLog(nil, l) //nolint: staticcheck
+	infoLog(context.Background(), l)
 }
 
 func (l *Logger) InfoContext(ctx context.Context) {
@@ -66,7 +66,7 @@ func (l *Logger) InfoContext(ctx context.Context) {
 }
 
 func (l *Logger) Warn() {
-	warnLog(nil, l) //nolint: staticcheck
+	warnLog(context.Background(), l)
 }
 
 func (l *Logger) WarnContext(ctx context.Context) {
@@ -74,7 +74,7 @@ func (l *Logger) WarnContext(ctx context.Context) {
 }
 
 func (l *Logger) Error() {
-	errorLog(nil, l) //nolint: staticcheck
+	errorLog(context.Background(), l)
 }
 
 func (l *Logger) ErrorContext(ctx context.Context) {
@@ -82,7 +82,7 @@ func (l *Logger) ErrorContext(ctx context.Context) {
 }
 
 func (l *Logger) Fatal() {
-	fatalLog(nil, l) //nolint: staticcheck
+	fatalLog(context.Background(), l)
 }
 
 func (l *Logger) FatalContext(ctx context.Context) {

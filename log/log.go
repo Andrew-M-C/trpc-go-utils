@@ -74,31 +74,31 @@ func SetLevel(levelString string) {
 // Debug 输出 debug 级别参数列表日志
 func Debug(v ...any) {
 	l := New().misc(v...)
-	debugLog(nil, l) //nolint: staticcheck
+	debugLog(context.Background(), l)
 }
 
 // Info 输出 info 级别参数列表日志
 func Info(v ...any) {
 	l := New().misc(v...)
-	infoLog(nil, l) //nolint: staticcheck
+	infoLog(context.Background(), l)
 }
 
 // Warn 输出 warn 级别参数列表日志
 func Warn(v ...any) {
 	l := New().misc(v...)
-	warnLog(nil, l) //nolint: staticcheck
+	warnLog(context.Background(), l)
 }
 
 // Error 输出 error 级别参数列表日志
 func Error(v ...any) {
 	l := New().misc(v...)
-	errorLog(nil, l) //nolint: staticcheck
+	errorLog(context.Background(), l)
 }
 
 // Fatal 输出 fatal 级别参数列表日志
 func Fatal(v ...any) {
 	l := New().misc(v...)
-	fatalLog(nil, l) //nolint: staticcheck
+	fatalLog(context.Background(), l)
 }
 
 // MARK: 没有 context 的 formatting
@@ -106,31 +106,31 @@ func Fatal(v ...any) {
 // Debugf 格式化输出 debug 级别日志
 func Debugf(f string, v ...any) {
 	l := New().Format(f, v...)
-	debugLog(nil, l) //nolint: staticcheck
+	debugLog(context.Background(), l)
 }
 
 // Infof 格式化输出 info 级别日志
 func Infof(f string, v ...any) {
 	l := New().Format(f, v...)
-	infoLog(nil, l) //nolint: staticcheck
+	infoLog(context.Background(), l)
 }
 
 // Warnf 格式化输出 warn 级别日志
 func Warnf(f string, v ...any) {
 	l := New().Format(f, v...)
-	warnLog(nil, l) //nolint: staticcheck
+	warnLog(context.Background(), l)
 }
 
 // Errorf 格式化输出 error 级别日志
 func Errorf(f string, v ...any) {
 	l := New().Format(f, v...)
-	errorLog(nil, l) //nolint: staticcheck
+	errorLog(context.Background(), l)
 }
 
 // Fatalf 格式化输出 fatal 级别日志
 func Fatalf(f string, v ...any) {
 	l := New().Format(f, v...)
-	fatalLog(nil, l) //nolint: staticcheck
+	fatalLog(context.Background(), l)
 }
 
 // MARK: 带 context 的参数列表
