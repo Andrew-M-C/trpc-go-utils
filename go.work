@@ -6,6 +6,7 @@ use (
 	./client/kafka
 	./client/localcache
 	./client/redis
+	./client/redsql
 	./client/sqlx
 	./codec
 	./concurrent
