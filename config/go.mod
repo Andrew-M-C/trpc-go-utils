@@ -8,7 +8,7 @@ require (
 	github.com/Andrew-M-C/go.util/channel v0.0.0-20250116061329-8e3db2afac06
 	github.com/Andrew-M-C/go.util/runtime v0.0.0-20251120101424-fd2377cf6964
 	github.com/Andrew-M-C/go.util/sync v0.0.0-20250116061329-8e3db2afac06
-	github.com/Andrew-M-C/go.util/unsafe v0.0.0-20250116061329-8e3db2afac06
+	github.com/Andrew-M-C/go.util/unsafe v0.0.0-20260403114733-2fc83c6c2ac4
 	github.com/Andrew-M-C/trpc-go-utils/log v0.0.0-20251111090641-9d6484c774e6
 	github.com/Andrew-M-C/trpc-go-utils/recovery v0.0.0-20251111090641-9d6484c774e6
 	github.com/fsnotify/fsnotify v1.9.0

@@ -4,8 +4,7 @@ github.com/Andrew-M-C/go.util/channel v0.0.0-20250116061329-8e3db2afac06 h1:BiTY
 github.com/Andrew-M-C/go.util/channel v0.0.0-20250116061329-8e3db2afac06/go.mod h1:TSoSnqSU9XErQ0kuNKQBBPDfuyFvoSUyP1t7FCYRSyk=
 github.com/Andrew-M-C/go.util/sync v0.0.0-20250116061329-8e3db2afac06 h1:fXjubadHHhvxebDpDOLpXh3eO8gyVt4giClOcq67WKc=
 github.com/Andrew-M-C/go.util/sync v0.0.0-20250116061329-8e3db2afac06/go.mod h1:1NSK/PwV40XNw+YkLHgQkpHWZQRu6bIBdTPB6wuhWqI=
-github.com/Andrew-M-C/go.util/unsafe v0.0.0-20250116061329-8e3db2afac06 h1:iikOmz0hMsl6/7C+yCj9xSHSye4GVZ4i5hb3X309CGM=
-github.com/Andrew-M-C/go.util/unsafe v0.0.0-20250116061329-8e3db2afac06/go.mod h1:cN+VilNtYInWPXfTf2YiBKndjbZ1oP1AMLRDNHgI7Vg=
+github.com/Andrew-M-C/go.util/unsafe v0.0.0-20260403114733-2fc83c6c2ac4 h1:sHpX+jkhoQP5SEGDg4BuIWOPcwATMYJ+OpjdRsfUZZs=
 github.com/Andrew-M-C/trpc-go-utils/config v0.0.0-20250116071933-d268d3e7e3ab h1:kGWnZZbGdDg889H/k20XKPAwTxVozFQjbof/HTmTRCw=
 github.com/Andrew-M-C/trpc-go-utils/config v0.0.0-20250116071933-d268d3e7e3ab/go.mod h1:2JF6rNspt5h4yApoVYkXFng5mbdcGJORmStK/RQosJ4=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=

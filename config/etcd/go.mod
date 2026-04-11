@@ -14,7 +14,7 @@ require (
 require (
 	github.com/Andrew-M-C/go.util/channel v0.0.0-20250116061329-8e3db2afac06 // indirect
 	github.com/Andrew-M-C/go.util/sync v0.0.0-20250116061329-8e3db2afac06 // indirect
-	github.com/Andrew-M-C/go.util/unsafe v0.0.0-20250116061329-8e3db2afac06 // indirect
+	github.com/Andrew-M-C/go.util/unsafe v0.0.0-20260403114733-2fc83c6c2ac4 // indirect
 	github.com/BurntSushi/toml v1.5.0 // indirect
 	github.com/andybalholm/brotli v1.1.1 // indirect
 	github.com/coreos/go-semver v0.3.0 // indirect

@@ -5,6 +5,7 @@ go 1.23.0
 toolchain go1.23.5
 
 require (
+	github.com/Andrew-M-C/go.util/unsafe v0.0.0-20260403114733-2fc83c6c2ac4
 	github.com/Andrew-M-C/trpc-go-utils/client/buffer v0.0.0-20250116064610-a34214869a16
 	github.com/redis/go-redis/v9 v9.7.0
 	trpc.group/trpc-go/trpc-database/goredis v1.0.0

@@ -8,8 +8,7 @@ github.com/Andrew-M-C/go.util/log v0.0.0-20251111084840-655d831cc1cf h1:EBezQtWP
 github.com/Andrew-M-C/go.util/log v0.0.0-20251111084840-655d831cc1cf/go.mod h1:hHRNsYKMeVEqQv4ml56XFmgxBSDy6UIE2T25sUGEJZY=
 github.com/Andrew-M-C/go.util/runtime v0.0.0-20251120101424-fd2377cf6964 h1:920K4g3+M0NGL9Iwl59YDkPkkc66JVzOS/mw0iXZWXM=
 github.com/Andrew-M-C/go.util/runtime v0.0.0-20251120101424-fd2377cf6964/go.mod h1:CwlkKKp8hfQhZh6kJWDQc1yQ0uVHJsUpPai/CD/tWAA=
-github.com/Andrew-M-C/go.util/unsafe v0.0.0-20250116061329-8e3db2afac06 h1:iikOmz0hMsl6/7C+yCj9xSHSye4GVZ4i5hb3X309CGM=
-github.com/Andrew-M-C/go.util/unsafe v0.0.0-20250116061329-8e3db2afac06/go.mod h1:cN+VilNtYInWPXfTf2YiBKndjbZ1oP1AMLRDNHgI7Vg=
+github.com/Andrew-M-C/go.util/unsafe v0.0.0-20260403114733-2fc83c6c2ac4 h1:sHpX+jkhoQP5SEGDg4BuIWOPcwATMYJ+OpjdRsfUZZs=
 github.com/Andrew-M-C/trpc-go-utils/client/sqlx v0.0.0-20251209080417-0025b7e09e1f h1:mkLZ+iNYOy+tQ0SfxfMxKMkBpZurbrX5OZOAHN9k2G8=
 github.com/Andrew-M-C/trpc-go-utils/client/sqlx v0.0.0-20251209080417-0025b7e09e1f/go.mod h1:Rl3xGTESwo8NkssfnUaVajBrZA9vHQA7CVB06BFyUN0=
 github.com/Andrew-M-C/trpc-go-utils/concurrent v0.0.0-20251209080417-0025b7e09e1f h1:bMensOJhA+cq6/hMvbXMXqgUfqSx00rzVP58lfRSIJI=
