@@ -16,15 +16,20 @@ type RedSQL interface {
     redis.StringCmdable
 }
 
-// ClientGetter 返回动态获取 RedSQL 客户端的函数，遵循 trpc-go 的 client 惯例
+// ClientGetter 返回动态获取 RedSQL 客户端的函数，遵循 trpc-go 的 client 惯例。
+// 调用时会启动后台过期清理协程（见「后台轮询清理」）。
 func ClientGetter(
     name string,
-    redSQLOpts RedSQLOptions,
+    redSQLOpts Options,
     opts ...client.Option,
 ) func(context.Context) (RedSQL, error)
+
+// New 使用已有的 sqlx.Client 创建 RedSQL 实例，适用于不启动 trpc 框架的场景（如单元测试）。
+// 不会启动后台过期清理协程。
+func New(cli sqlx.Client, opts Options) RedSQL
 ```
 
-### RedSQLOptions
+### Options
 
 | 字段 | 类型 | 默认值 | 说明 |
 |------|------|--------|------|
@@ -34,6 +39,7 @@ func ClientGetter(
 
 **ExpiryJitter 自动调整规则**（在 `applyDefaults()` 中执行）：
 - `ExpiryJitter < 0` → 修正为 `0`（不抖动）
+- `ExpiryJitter == 0` → 使用默认值 `10s`
 - `ExpiryJitter >= ExpiryInterval` → `ExpiryInterval = (ExpiryInterval + ExpiryJitter) / 2`，`ExpiryJitter = ExpiryInterval`（保证抖动始终小于一个周期）
 
 ---
@@ -85,12 +91,20 @@ WHERE `expire_ts_ms` != 0
 LIMIT 1000
 ```
 
-- **强制开启**，不可禁用；间隔和抖动通过 `RedSQLOptions` 配置
+- **仅 `ClientGetter` 开启**，`New` 不启动清理协程（测试场景通常自行管理数据）
+- 间隔和抖动通过 `Options` 配置，清理逻辑本身不可单独禁用
 - 每次限删 1000 行，防止大批量删除造成锁争用
-- 每次清理创建独立 trace ID（`log.EnsureTraceID`），便于日志追踪
+- 每次清理通过 `concurrent.NewSpan` 创建 OTel span（`redsql: run expiry cleanup`），日志携带 W3C trace context，便于链路追踪
 - 成功删除 > 0 行时打印 `Info` 日志；获取连接失败或 DELETE 失败时打印 `Error` 日志
 
-**Thundering Herd 防护**：协程启动时先随机 sleep `[0, ExpiryJitter)`，将多个实例的首次触发时刻打散。
+**协程生命周期**（`expiry.go`）：
+
+| 阶段 | 行为 |
+|------|------|
+| 启动 | `concurrent.Detach(ctx, "redsql: expiry cleanup", ...)` 分离后台任务，继承 panic recovery |
+| 抖动 | 随机 sleep `[0, ExpiryJitter)`，将多个实例的首次触发时刻打散 |
+| 轮询 | `time.Ticker` 按 `ExpiryInterval` 触发，每次调用 `runExpiryCleanup` |
+| 单次清理 | `concurrent.NewSpan` 创建子 span → 执行 DELETE → `span.End()` |
 
 ---
 
@@ -175,9 +189,9 @@ client/redsql/
 ├── go.mod
 ├── DESIGN.md          // 本文件
 ├── PLAN.md            // 开发过程规划与决策记录
-├── redsql.go          // 公共接口、ClientGetter、wrapper / RedSQLOptions 定义
+├── redsql.go          // 公共接口、ClientGetter、New、wrapper / Options 定义
 ├── helpers.go         // 工具函数（notExpiredCond、expiresAtMs、formatValue 等）
-├── expiry.go          // 后台过期清理协程（concurrent.Detach + jitter + log）
+├── expiry.go          // 后台过期清理协程（concurrent.Detach + NewSpan + jitter + log）
 ├── cmd_basic.go       // Get / Set / SetEx / SetArgs / SetNX / SetXX / GetDel / GetEx / GetSet
 ├── cmd_multi.go       // MGet / MSet / MSetNX
 ├── cmd_numeric.go     // Incr / IncrBy / Decr / DecrBy / IncrByFloat

@@ -14,7 +14,7 @@ import (
 // startExpiryWorker 使用 concurrent.Detach 启动后台过期清理协程
 // 首次启动时会在 [0, ExpiryJitter) 内随机 sleep，将多个实例的触发时刻打散（避免 Thundering Herd）
 func startExpiryWorker(name string, opts []client.Option, redSQLOpts Options) {
-	concurrent.Detach(context.Background(), func(ctx context.Context) {
+	concurrent.Detach(context.Background(), "redsql: expiry cleanup", func(ctx context.Context) {
 		if redSQLOpts.ExpiryJitter > 0 {
 			sleepDur := time.Duration(rand.Int63n(int64(redSQLOpts.ExpiryJitter)))
 			time.Sleep(sleepDur)
@@ -28,7 +28,8 @@ func startExpiryWorker(name string, opts []client.Option, redSQLOpts Options) {
 }
 
 func runExpiryCleanup(name string, opts []client.Option, redSQLOpts Options) {
-	ctx := log.EnsureTraceID(context.Background())
+	ctx, span := concurrent.NewSpan(context.Background(), "redsql: run expiry cleanup")
+	defer span.End()
 
 	cli, err := sqlx.ClientGetter(name, opts...)(ctx)
 	if err != nil {

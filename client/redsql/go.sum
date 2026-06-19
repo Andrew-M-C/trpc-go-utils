@@ -1,12 +1,15 @@
 filippo.io/edwards25519 v1.1.0 h1:FNf4tywRC1HmFuKW5xopWpigGjJKiJSV0Cqo0cJWDaA=
 filippo.io/edwards25519 v1.1.0/go.mod h1:BxyFTGdWcka3PhytdK4V28tE5sGfRvvvRV7EaN4VDT4=
 github.com/Andrew-M-C/go.jsonvalue v1.4.3 h1:WVuMJXSsEPS/ftluR9I/DTFUsRB+FwzBmBKDKVb2udg=
+github.com/Andrew-M-C/go.jsonvalue v1.4.3/go.mod h1:EsYbZ97LlOhGUs+7qTwZI9KaJrPe6nK8sEZKEqr70Ww=
 github.com/Andrew-M-C/go.objectid v1.0.3 h1:JRqELpahHp+pVkFA9qEUxBUZSZkwNWAeSDmcP3I9uF4=
 github.com/Andrew-M-C/go.objectid v1.0.3/go.mod h1:8/PONmvWI/hT3JSb4rRjIp1ZxozPVJv4g1jHHt0fAZ0=
 github.com/Andrew-M-C/go.util/log v0.0.0-20251111084840-655d831cc1cf h1:EBezQtWPgBnz4dTI5vF9Y8Vj+OwNQ2jAPyjJ9xsEklA=
 github.com/Andrew-M-C/go.util/log v0.0.0-20251111084840-655d831cc1cf/go.mod h1:hHRNsYKMeVEqQv4ml56XFmgxBSDy6UIE2T25sUGEJZY=
 github.com/Andrew-M-C/go.util/runtime v0.0.0-20260606121558-2a644cb968a6 h1:DP4alT9zq9lCH7RUnNGagqOrtJ3lKSerAWCbg0wetnk=
+github.com/Andrew-M-C/go.util/runtime v0.0.0-20260606121558-2a644cb968a6/go.mod h1:ksxt4kcCZ1vGRA3yvYo99oFdiax16taBUuZT2CH2ogo=
 github.com/Andrew-M-C/go.util/unsafe v0.0.0-20260606121558-2a644cb968a6 h1:WDhUj42yrm4Jeb9o0kIr9OxXE7+j6YdQjFTV0G4K/cA=
+github.com/Andrew-M-C/go.util/unsafe v0.0.0-20260606121558-2a644cb968a6/go.mod h1:cN+VilNtYInWPXfTf2YiBKndjbZ1oP1AMLRDNHgI7Vg=
 github.com/Andrew-M-C/trpc-go-utils/client/sqlx v0.0.0-20251209080417-0025b7e09e1f h1:mkLZ+iNYOy+tQ0SfxfMxKMkBpZurbrX5OZOAHN9k2G8=
 github.com/Andrew-M-C/trpc-go-utils/client/sqlx v0.0.0-20251209080417-0025b7e09e1f/go.mod h1:Rl3xGTESwo8NkssfnUaVajBrZA9vHQA7CVB06BFyUN0=
 github.com/Andrew-M-C/trpc-go-utils/concurrent v0.0.0-20251209080417-0025b7e09e1f h1:bMensOJhA+cq6/hMvbXMXqgUfqSx00rzVP58lfRSIJI=
@@ -54,6 +57,7 @@ github.com/google/flatbuffers v25.2.10+incompatible/go.mod h1:1AeVuKshWv4vARoZat
 github.com/google/go-cmp v0.5.2/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/gNBxE=
 github.com/google/go-cmp v0.5.5/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/gNBxE=
 github.com/google/go-cmp v0.7.0 h1:wk8382ETsv4JYUZwIsn6YpYiWiBsYLSJiTsyBybVuN8=
+github.com/google/go-cmp v0.7.0/go.mod h1:pXiqmnSA92OHEEa9HXL2W4E7lf9JzCmGVUdgjX3N/iU=
 github.com/google/gofuzz v1.0.0/go.mod h1:dBl0BpW6vV/+mYPU4Po3pmUjxk6FQPldtuIdl/M65Eg=
 github.com/gopherjs/gopherjs v0.0.0-20181017120253-0766667cb4d1/go.mod h1:wJfORRmW1u3UXTncJ5qlYoELFm8eSnnEO6hX4iZ3EWY=
 github.com/gopherjs/gopherjs v1.17.2 h1:fQnZVsXk8uxXIStYb0N4bGk7jeyTalG/wsZjQ25dO0g=
@@ -98,6 +102,7 @@ github.com/montanaflynn/stats v0.0.0-20171201202039-1bf9dbcd8cbe/go.mod h1:wL8QJ
 github.com/panjf2000/ants/v2 v2.11.3 h1:AfI0ngBoXJmYOpDh9m516vjqoUu2sLrIVgppI9TZVpg=
 github.com/panjf2000/ants/v2 v2.11.3/go.mod h1:8u92CYMUc6gyvTIw8Ru7Mt7+/ESnJahz5EVtqfrilek=
 github.com/pierrec/lz4/v4 v4.1.21 h1:yOVMLb6qSIDP67pl/5F7RepeKYu/VmTyEXvuMI5d9mQ=
+github.com/pierrec/lz4/v4 v4.1.21/go.mod h1:gZWDp/Ze/IJXGXf23ltt2EXimqmTUXEy0GFuRQyBid4=
 github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
@@ -106,7 +111,8 @@ github.com/prashantv/gostub v1.1.0 h1:BTyx3RfQjRHnUWaGF9oQos79AlQ5k8WNktv7VGvVH4
 github.com/prashantv/gostub v1.1.0/go.mod h1:A5zLQHz7ieHGG7is6LLXLz7I8+3LZzsrV0P1IAHhP5U=
 github.com/redis/go-redis/v9 v9.7.0 h1:HhLSs+B6O021gwzl+locl0zEDnyNkxMtf/Z3NNBMa9E=
 github.com/redis/go-redis/v9 v9.7.0/go.mod h1:f6zhXITC7JUJIlPEiBOTXxJgPLdZcA93GewI7inzyWw=
-github.com/rogpeppe/go-internal v1.13.1 h1:KvO1DLK/DRN07sQ1LQKScxyZJuNnedQ5/wKSR38lUII=
+github.com/rogpeppe/go-internal v1.14.1 h1:UQB4HGPB6osV0SQTLymcB4TgvyWu6ZyliaW0tI/otEQ=
+github.com/rogpeppe/go-internal v1.14.1/go.mod h1:MaRKkUm5W0goXpeCfT7UZI6fk/L7L7so1lCWt35ZSgc=
 github.com/shopspring/decimal v1.4.0 h1:bxl37RwXBklmTi0C79JfXCEBD1cqqHt0bbgBAGFp81k=
 github.com/shopspring/decimal v1.4.0/go.mod h1:gawqmDU56v4yIKSwfBSFip1HdCCXN8/+DMd9qYNcwME=
 github.com/smarty/assertions v1.15.0 h1:cR//PqUBUiQRakZWqBiFFQ9wb8emQGDb0HeGdqGByCY=
@@ -122,6 +128,7 @@ github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UV
 github.com/stretchr/testify v1.6.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
 github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
 github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu7U=
+github.com/stretchr/testify v1.11.1/go.mod h1:wZwfW3scLgRK+23gO65QZefKpKQRnfz6sD981Nm4B6U=
 github.com/tidwall/pretty v1.0.0/go.mod h1:XNkn88O1ChpSDQmQeStsy+sBenx6DDtFZJxhVysOjyk=
 github.com/valyala/bytebufferpool v1.0.0 h1:GqA5TC/0021Y/b9FG4Oi9Mr3q7XYx6KllzawFIhcdPw=
 github.com/valyala/bytebufferpool v1.0.0/go.mod h1:6bBcMArwyJ5K/AmCkWv1jt77kVWyCJ6HpOuEn7z0Csc=
@@ -164,6 +171,7 @@ golang.org/x/sys v0.0.0-20201119102817-f84b799fce68/go.mod h1:h1NjWce9XRLGQEsW7w
 golang.org/x/sys v0.0.0-20210423082822-04245dca01da/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20210615035016-665e8c7367d1/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.35.0 h1:vz1N37gP5bs89s7He8XuIYXpyY0+QlsKmzipCbUtyxI=
+golang.org/x/sys v0.35.0/go.mod h1:BJP2sWEmIv4KK5OTEluFJCKSidICx8ciO85XgH3Ak8k=
 golang.org/x/term v0.0.0-20201126162022-7de9c90e9dd1/go.mod h1:bj7SfCRtBDWHUb9snDiAeCFNEtKQo2Wmx5Cou7ajbmo=
 golang.org/x/text v0.3.0/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
 golang.org/x/text v0.3.6/go.mod h1:5Zoc/QRtKVWzQhOtBMvqHzDpF6irO9z98xDceosuGiQ=
@@ -189,6 +197,7 @@ trpc.group/trpc-go/tnet v1.0.1/go.mod h1:s/webUFYWEFBHErKyFmj7LYC7XfC2LTLCcwfSnJ
 trpc.group/trpc-go/trpc-database/mysql v1.0.0 h1:WXSK8HZxVzH7U6MpdxTpDOOJgPOhclKt7v6VWrZAwNs=
 trpc.group/trpc-go/trpc-database/mysql v1.0.0/go.mod h1:bBBevLt+v6gXRTQ26eViw7DqNw9g4x8sg6vPGXwUsP0=
 trpc.group/trpc-go/trpc-go v1.0.4 h1:DaTTeaSf5Ah/dtQ8nAKKV2zaO7b7EB6qWLNWlMwLSsc=
+trpc.group/trpc-go/trpc-go v1.0.4/go.mod h1:lZOyo/G6nv2eBEPeDmbEfRhQDCOB65WsTqKqsgC2paA=
 trpc.group/trpc-go/trpc-selector-dsn v1.1.0 h1:z3VqiboZq60MBu0cHVlRe5q7VydGbBdrX9xAfzsTVIQ=
 trpc.group/trpc-go/trpc-selector-dsn v1.1.0/go.mod h1:78NOrldaWxLJd2M+VCm4OABphAYzx98dZWTLDFSzeQg=
 trpc.group/trpc-go/trpc-utils v1.0.0 h1:u235vCzQd4RgPeDj+4XIkyOaZ2MApV7z6tpNg2h1nYs=
