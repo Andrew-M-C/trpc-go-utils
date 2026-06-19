@@ -3,19 +3,23 @@ package concurrent
 import (
 	"context"
 
-	"github.com/Andrew-M-C/go.util/log/trace"
+	oteltrace "go.opentelemetry.io/otel/trace"
 )
-
-func init() {
-	// 支持一下 log 所使用的 trace ID 功能, 复制一下
-	RegisterContextKeyWhenDetach(trace.TraceIDContextKey())
-}
 
 func RegisterContextKeyWhenDetach(key any) {
 	if key == nil {
 		return
 	}
 	internal.contextKeys.Store(key, struct{}{})
+}
+
+// copyTracing 将 from 中的 OTel span 复制到 to，使 NewSpan 能在 detached context 下创建子 span。
+func copyTracing(from, to context.Context) context.Context {
+	span := oteltrace.SpanFromContext(from)
+	if span == nil || !span.SpanContext().IsValid() {
+		return to
+	}
+	return oteltrace.ContextWithSpan(to, span)
 }
 
 func copyContextValues(to, from context.Context) context.Context {
