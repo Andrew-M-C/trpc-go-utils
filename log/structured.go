@@ -10,9 +10,9 @@ import (
 	"time"
 
 	jsonvalue "github.com/Andrew-M-C/go.jsonvalue"
-	"github.com/Andrew-M-C/go.util/log/trace"
 	"github.com/Andrew-M-C/go.util/runtime/caller"
 	"github.com/Andrew-M-C/go.util/unsafe"
+	"go.opentelemetry.io/otel/trace"
 	"trpc.group/trpc-go/trpc-go/log"
 )
 
@@ -276,13 +276,14 @@ func (l logStringer) String() string {
 		iterateFields(l.logger)
 	}
 
-	// trace ID
+	// W3C trace context（context 中有时才输出）
 	if ctx := l.ctx; ctx != nil {
-		if traceID := trace.TraceID(ctx); traceID != "" {
-			j.MustSetString(traceID).At("TRACE_ID")
+		sc := trace.SpanContextFromContext(ctx)
+		if sc.HasTraceID() {
+			j.MustSetString(sc.TraceID().String()).At("trace_id")
 		}
-		if history := trace.TraceIDStack(ctx); len(history) > 0 {
-			j.MustSet(history).At("TRACE_ID_STACK")
+		if sc.HasSpanID() {
+			j.MustSetString(sc.SpanID().String()).At("span_id")
 		}
 	}
 

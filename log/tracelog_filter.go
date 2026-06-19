@@ -2,11 +2,9 @@ package log
 
 import (
 	"context"
-	"encoding/json"
 	"reflect"
 	"time"
 
-	"github.com/Andrew-M-C/go.util/log/trace"
 	"trpc.group/trpc-go/trpc-go/codec"
 	"trpc.group/trpc-go/trpc-go/filter"
 	thttp "trpc.group/trpc-go/trpc-go/http"
@@ -15,8 +13,6 @@ import (
 const (
 	// tracelog 的 filter 名称
 	FilterName = "tracelog"
-	// TraceIDMetadataKey 定义用于传递 trace ID 的 trpc metadata 字段
-	TraceIDStackMetadataKey = "trace_id_stack"
 )
 
 // RegisterTraceLogFilter 注册 tracelog filter。请在 trpc.NewServer 之前调用。
@@ -25,16 +21,7 @@ func RegisterTraceLogFilter() {
 }
 
 func serverFilter(ctx context.Context, req any, next filter.ServerHandleFunc) (rsp any, err error) {
-	ctx, msg := codec.EnsureMessage(ctx)
-	var stack []string
-	if b := msg.ServerMetaData()[TraceIDStackMetadataKey]; len(b) > 0 {
-		_ = json.Unmarshal(b, &stack)
-	}
-	if len(stack) == 0 {
-		ctx = trace.EnsureTraceID(ctx)
-	} else {
-		ctx = trace.WithTraceIDStack(ctx, stack)
-	}
+	ctx, _ = codec.EnsureMessage(ctx)
 
 	caller := func() string {
 		if addr := codec.Message(ctx).RemoteAddr(); addr != nil {
@@ -68,8 +55,6 @@ func serverFilter(ctx context.Context, req any, next filter.ServerHandleFunc) (r
 }
 
 func clientFilter(ctx context.Context, req, rsp any, next filter.ClientHandleFunc) (err error) {
-	ctx = trace.EnsureTraceID(ctx)
-
 	callee := func() string {
 		if addr := codec.Message(ctx).RemoteAddr(); addr != nil {
 			return addr.String()

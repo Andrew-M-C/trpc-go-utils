@@ -3,31 +3,20 @@ package log_test
 import (
 	"context"
 	"errors"
-	"os"
 	"testing"
 	"time"
 
-	"github.com/Andrew-M-C/go.util/log/trace"
 	"github.com/Andrew-M-C/trpc-go-utils/log"
 )
-
-func TestMain(m *testing.M) {
-	log.SetLevel("info")
-	os.Exit(m.Run())
-}
 
 func TestLogger(*testing.T) {
 	log.Debug("Hello", "world", "!")
 	log.Infof("formatting %d - %v", 1234, time.Now())
-
-	ctx := context.Background()
-	ctx = trace.WithTraceID(ctx, "some_id")
-	log.WarnContextf(ctx, "看看有没有 tracing '%v'", trace.TraceID(ctx))
+	log.WarnContextf(context.Background(), "无 trace context 时不应输出 trace_id / span_id")
 
 	testFatal := false
 	if testFatal {
-		ctx = trace.WithTraceID(ctx, "another_id")
-		log.FatalContext(ctx, "看看有没有 tracing 和 stack")
+		log.FatalContext(context.Background(), "看看有没有 tracing 和 stack")
 	}
 	if testFatal {
 		log.Fatal("尝试一下 fatal")
@@ -37,15 +26,11 @@ func TestLogger(*testing.T) {
 func TestStructured(*testing.T) {
 	log.New().With("msg", "Hello, world!").Debug()
 	log.New().With("time", time.Now()).With("int", 1234).Info()
-
-	ctx := context.Background()
-	ctx = trace.WithTraceID(ctx, "some_id")
-	log.New().Text("看看有没有 tracing").With("trace_id", trace.TraceID(ctx)).WarnContext(ctx)
+	log.New().Text("无 trace context").WarnContext(context.Background())
 
 	if false {
-		ctx = trace.WithTraceID(ctx, "another_id")
-		log.New().Text("看看有没有 tracing 和 stack").FatalContext(ctx)
-		log.FatalContext(ctx, "看看有没有 tracing 和 stack")
+		log.New().Text("看看有没有 tracing 和 stack").FatalContext(context.Background())
+		log.FatalContext(context.Background(), "看看有没有 tracing 和 stack")
 	}
 }
 

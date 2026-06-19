@@ -8,13 +8,13 @@ require (
 	github.com/Andrew-M-C/trpc-go-utils/config v0.0.0-20250116071933-d268d3e7e3ab
 	gopkg.in/yaml.v3 v3.0.1
 	trpc.group/trpc-go/trpc-config-etcd v1.0.0
-	trpc.group/trpc-go/trpc-go v1.0.3
+	trpc.group/trpc-go/trpc-go v1.0.4
 )
 
 require (
 	github.com/Andrew-M-C/go.util/channel v0.0.0-20250116061329-8e3db2afac06 // indirect
 	github.com/Andrew-M-C/go.util/sync v0.0.0-20250116061329-8e3db2afac06 // indirect
-	github.com/Andrew-M-C/go.util/unsafe v0.0.0-20260403114733-2fc83c6c2ac4 // indirect
+	github.com/Andrew-M-C/go.util/unsafe v0.0.0-20260606121558-2a644cb968a6 // indirect
 	github.com/BurntSushi/toml v1.5.0 // indirect
 	github.com/andybalholm/brotli v1.1.1 // indirect
 	github.com/coreos/go-semver v0.3.0 // indirect
@@ -25,7 +25,7 @@ require (
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/golang/snappy v1.0.0 // indirect
 	github.com/google/flatbuffers v25.2.10+incompatible // indirect
-	github.com/google/go-cmp v0.6.0 // indirect
+	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
@@ -36,9 +36,11 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/panjf2000/ants/v2 v2.11.3 // indirect
 	github.com/petermattis/goid v0.0.0-20240813172612-4fcff4a6cae7 // indirect
+	github.com/pierrec/lz4/v4 v4.1.21 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/rogpeppe/go-internal v1.11.0 // indirect
+	github.com/rogpeppe/go-internal v1.13.1 // indirect
 	github.com/spf13/cast v1.7.1 // indirect
+	github.com/stretchr/testify v1.11.1 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.61.0 // indirect
 	go.etcd.io/etcd/api/v3 v3.5.9 // indirect
@@ -50,7 +52,7 @@ require (
 	go.uber.org/zap v1.27.0 // indirect
 	golang.org/x/net v0.39.0 // indirect
 	golang.org/x/sync v0.13.0 // indirect
-	golang.org/x/sys v0.32.0 // indirect
+	golang.org/x/sys v0.35.0 // indirect
 	golang.org/x/text v0.24.0 // indirect
 	google.golang.org/genproto v0.0.0-20220617124728-180714bec0ad // indirect
 	google.golang.org/grpc v1.51.0 // indirect

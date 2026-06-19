@@ -5,22 +5,11 @@ import (
 	"context"
 	"strings"
 
-	"github.com/Andrew-M-C/go.util/log/trace"
+	"go.opentelemetry.io/otel/trace"
 	"trpc.group/trpc-go/trpc-go"
 	"trpc.group/trpc-go/trpc-go/codec"
 	"trpc.group/trpc-go/trpc-go/log"
 )
-
-// MARK: tracing 配置
-
-// WithTraceID 更新 trace ID
-var WithTraceID = trace.WithTraceID
-
-// TraceID 从 context 中读取 trace ID
-var TraceID = trace.TraceID
-
-// EnsureTraceID 确保 context 中有一个 trace ID
-var EnsureTraceID = trace.EnsureTraceID
 
 // CloneContextForConcurrency 复制一个用于并发操作的新的 ctx, 包含 timeout 和 cancel 同步
 func CloneContextForConcurrency(ctx context.Context) context.Context {
@@ -35,15 +24,12 @@ func CloneContextForDetach(ctx context.Context) context.Context {
 }
 
 func copyTracing(from, to context.Context) context.Context {
-	if stack := trace.TraceIDStack(from); len(stack) > 0 {
-		to = trace.WithTraceIDStack(to, stack)
+	span := trace.SpanFromContext(from)
+	if span == nil || !span.SpanContext().IsValid() {
+		return to
 	}
-	if id := trace.TraceID(from); id != "" {
-		to = trace.WithTraceID(to, id)
-	}
-	return to
+	return trace.ContextWithSpan(to, span)
 }
-
 // MARK: 日志级别设置
 
 // SetLevel 设置日志级别, 参数为 debug, info, warn, error, fatal 这些

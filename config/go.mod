@@ -6,20 +6,20 @@ toolchain go1.23.5
 
 require (
 	github.com/Andrew-M-C/go.util/channel v0.0.0-20250116061329-8e3db2afac06
-	github.com/Andrew-M-C/go.util/runtime v0.0.0-20251120101424-fd2377cf6964
+	github.com/Andrew-M-C/go.util/runtime v0.0.0-20260606121558-2a644cb968a6
 	github.com/Andrew-M-C/go.util/sync v0.0.0-20250116061329-8e3db2afac06
-	github.com/Andrew-M-C/go.util/unsafe v0.0.0-20260403114733-2fc83c6c2ac4
+	github.com/Andrew-M-C/go.util/unsafe v0.0.0-20260606121558-2a644cb968a6
 	github.com/Andrew-M-C/trpc-go-utils/log v0.0.0-20251111090641-9d6484c774e6
 	github.com/Andrew-M-C/trpc-go-utils/recovery v0.0.0-20251111090641-9d6484c774e6
 	github.com/fsnotify/fsnotify v1.9.0
 	github.com/google/uuid v1.6.0
 	github.com/smartystreets/goconvey v1.8.1
 	gopkg.in/yaml.v3 v3.0.1
-	trpc.group/trpc-go/trpc-go v1.0.3
+	trpc.group/trpc-go/trpc-go v1.0.4
 )
 
 require (
-	github.com/Andrew-M-C/go.jsonvalue v1.4.2 // indirect
+	github.com/Andrew-M-C/go.jsonvalue v1.4.3 // indirect
 	github.com/Andrew-M-C/go.objectid v1.0.3 // indirect
 	github.com/Andrew-M-C/go.util/log v0.0.0-20251111084840-655d831cc1cf // indirect
 	github.com/BurntSushi/toml v1.5.0 // indirect
@@ -27,6 +27,7 @@ require (
 	github.com/go-playground/form/v4 v4.2.0 // indirect
 	github.com/golang/snappy v1.0.0 // indirect
 	github.com/google/flatbuffers v25.2.10+incompatible // indirect
+	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/gopherjs/gopherjs v1.17.2 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
@@ -39,7 +40,9 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/panjf2000/ants/v2 v2.11.3 // indirect
 	github.com/petermattis/goid v0.0.0-20240813172612-4fcff4a6cae7 // indirect
+	github.com/pierrec/lz4/v4 v4.1.21 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
+	github.com/rogpeppe/go-internal v1.13.1 // indirect
 	github.com/shopspring/decimal v1.4.0 // indirect
 	github.com/smarty/assertions v1.15.0 // indirect
 	github.com/spf13/cast v1.7.1 // indirect
@@ -54,7 +57,7 @@ require (
 	golang.org/x/exp v0.0.0-20250106191152-7588d65b2ba8 // indirect
 	golang.org/x/net v0.39.0 // indirect
 	golang.org/x/sync v0.13.0 // indirect
-	golang.org/x/sys v0.32.0 // indirect
+	golang.org/x/sys v0.35.0 // indirect
 	golang.org/x/text v0.24.0 // indirect
 	google.golang.org/protobuf v1.36.6 // indirect
 	trpc.group/trpc-go/tnet v1.0.1 // indirect
