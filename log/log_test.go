@@ -2,11 +2,16 @@ package log_test
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
+	"fmt"
+	"strings"
+	"sync"
 	"testing"
 	"time"
 
 	"github.com/Andrew-M-C/trpc-go-utils/log"
+	trpclog "trpc.group/trpc-go/trpc-go/log"
 )
 
 func TestLogger(*testing.T) {
@@ -52,4 +57,141 @@ func TestContext(*testing.T) {
 
 func TestFatal(*testing.T) {
 	// log.Fatal("看看有没有 CALLER_STACK")
+}
+
+func TestIsDying(t *testing.T) {
+	ctx := context.Background()
+	if log.IsDying(ctx) {
+		t.Fatal("background context should not be dying")
+	}
+
+	ctx = log.Dying(ctx)
+	if !log.IsDying(ctx) {
+		t.Fatal("dying context should be marked")
+	}
+	if log.IsDying(context.Background()) {
+		t.Fatal("dying mark should not leak to other contexts")
+	}
+}
+
+type stubTRPCLogger struct {
+	mu     sync.Mutex
+	levels map[string][]string
+}
+
+func newStubTRPCLogger() *stubTRPCLogger {
+	return &stubTRPCLogger{levels: make(map[string][]string)}
+}
+
+func (s *stubTRPCLogger) record(level string, args ...interface{}) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.levels[level] = append(s.levels[level], fmt.Sprint(args...))
+}
+
+func (s *stubTRPCLogger) Trace(args ...interface{})                 { s.record("trace", args...) }
+func (s *stubTRPCLogger) Tracef(f string, args ...interface{})     { s.record("trace", fmt.Sprintf(f, args...)) }
+func (s *stubTRPCLogger) Debug(args ...interface{})                 { s.record("debug", args...) }
+func (s *stubTRPCLogger) Debugf(f string, args ...interface{})      { s.record("debug", fmt.Sprintf(f, args...)) }
+func (s *stubTRPCLogger) Info(args ...interface{})                  { s.record("info", args...) }
+func (s *stubTRPCLogger) Infof(f string, args ...interface{})       { s.record("info", fmt.Sprintf(f, args...)) }
+func (s *stubTRPCLogger) Warn(args ...interface{})                  { s.record("warn", args...) }
+func (s *stubTRPCLogger) Warnf(f string, args ...interface{})       { s.record("warn", fmt.Sprintf(f, args...)) }
+func (s *stubTRPCLogger) Error(args ...interface{})                 { s.record("error", args...) }
+func (s *stubTRPCLogger) Errorf(f string, args ...interface{})      { s.record("error", fmt.Sprintf(f, args...)) }
+func (s *stubTRPCLogger) Fatal(args ...interface{})               { s.record("fatal", args...) }
+func (s *stubTRPCLogger) Fatalf(f string, args ...interface{})    { s.record("fatal", fmt.Sprintf(f, args...)) }
+func (s *stubTRPCLogger) Sync() error                               { return nil }
+func (s *stubTRPCLogger) SetLevel(string, trpclog.Level)            {}
+func (s *stubTRPCLogger) GetLevel(string) trpclog.Level             { return trpclog.LevelDebug }
+func (s *stubTRPCLogger) With(...trpclog.Field) trpclog.Logger      { return s }
+
+func (s *stubTRPCLogger) lines(level string) []string {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	return append([]string(nil), s.levels[level]...)
+}
+
+func withStubTRPCLogger(t *testing.T) *stubTRPCLogger {
+	t.Helper()
+
+	stub := newStubTRPCLogger()
+	old := trpclog.GetDefaultLogger()
+	trpclog.SetLogger(stub)
+	t.Cleanup(func() {
+		trpclog.SetLogger(old)
+	})
+
+	log.SetLevel("debug")
+	return stub
+}
+
+func parseLogFields(t *testing.T, s string) map[string]any {
+	t.Helper()
+	raw := s
+	if idx := strings.Index(s, "\t"); idx >= 0 {
+		raw = s[idx+1:]
+	}
+	var fields map[string]any
+	if err := json.Unmarshal([]byte(raw), &fields); err != nil {
+		t.Fatalf("parse log json: %v, raw=%q", err, raw)
+	}
+	return fields
+}
+
+func TestDebugContextWhenDying(t *testing.T) {
+	stub := withStubTRPCLogger(t)
+
+	log.DebugContext(context.Background(), "normal debug")
+	if got := stub.lines("debug"); len(got) != 1 {
+		t.Fatalf("expected 1 debug log, got %d: %v", len(got), got)
+	}
+	if got := stub.lines("info"); len(got) != 0 {
+		t.Fatalf("expected no info log, got %v", got)
+	}
+
+	stub = withStubTRPCLogger(t)
+	ctx := log.Dying(context.Background())
+	log.DebugContext(ctx, "dying debug")
+
+	if got := stub.lines("debug"); len(got) != 0 {
+		t.Fatalf("dying debug should not use debug level, got %v", got)
+	}
+	infoLines := stub.lines("info")
+	if len(infoLines) != 1 {
+		t.Fatalf("expected 1 info log, got %d: %v", len(infoLines), infoLines)
+	}
+
+	fields := parseLogFields(t, infoLines[0])
+	if fields["LEVEL"] != "INFO" {
+		t.Fatalf("LEVEL = %v, want INFO", fields["LEVEL"])
+	}
+	if fields["DYING"] != true {
+		t.Fatalf("DYING = %v, want true", fields["DYING"])
+	}
+}
+
+func TestDebugContextfWhenDying(t *testing.T) {
+	stub := withStubTRPCLogger(t)
+	ctx := log.Dying(context.Background())
+	log.DebugContextf(ctx, "dying %s %d", "debug", 42)
+
+	infoLines := stub.lines("info")
+	if len(infoLines) != 1 {
+		t.Fatalf("expected 1 info log, got %d: %v", len(infoLines), infoLines)
+	}
+	if got := stub.lines("debug"); len(got) != 0 {
+		t.Fatalf("dying debug should not use debug level, got %v", got)
+	}
+	if !strings.Contains(infoLines[0], "dying debug 42") {
+		t.Fatalf("formatted message missing from log: %q", infoLines[0])
+	}
+
+	fields := parseLogFields(t, infoLines[0])
+	if fields["LEVEL"] != "INFO" {
+		t.Fatalf("LEVEL = %v, want INFO", fields["LEVEL"])
+	}
+	if fields["DYING"] != true {
+		t.Fatalf("DYING = %v, want true", fields["DYING"])
+	}
 }
