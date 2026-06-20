@@ -17,15 +17,15 @@ func SetLevel(levelString string) {
 	switch strings.TrimSpace(strings.ToUpper(levelString)) {
 	default:
 		return
-	case debugLevel:
+	case "DEBUG", "DBG":
 		lv = log.LevelDebug
-	case infoLevel:
+	case "INFO", "INF":
 		lv = log.LevelInfo
-	case warnLevel, "WARNING":
+	case "WARN", "WRN", "WARNING":
 		lv = log.LevelWarn
-	case errorLevel:
+	case "ERROR", "ERR":
 		lv = log.LevelError
-	case fatalLevel:
+	case "FATAL", "FTL":
 		lv = log.LevelFatal
 	}
 

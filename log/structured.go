@@ -7,21 +7,12 @@ import (
 	"fmt"
 	"slices"
 	"strings"
-	"time"
 
 	jsonvalue "github.com/Andrew-M-C/go.jsonvalue"
 	"github.com/Andrew-M-C/go.util/runtime/caller"
 	"github.com/Andrew-M-C/go.util/unsafe"
 	"go.opentelemetry.io/otel/trace"
 	"trpc.group/trpc-go/trpc-go/log"
-)
-
-const (
-	debugLevel = "DEBUG"
-	infoLevel  = "INFO"
-	warnLevel  = "WARN"
-	errorLevel = "ERROR"
-	fatalLevel = "FATAL"
 )
 
 type loggerKey struct{}
@@ -237,16 +228,6 @@ func fatalLog(ctx context.Context, l *Logger) {
 func (l logStringer) String() string {
 	j := jsonvalue.NewObject()
 
-	// 时间
-	j.MustSetString(time.Now().Local().Format("2006-01-02 15:04:05.000000")).At("TIME")
-
-	// 级别
-	j.MustSetString(l.level).At("LEVEL")
-
-	// 调用方信息
-	const skip = 10
-	fillCaller(caller.GetCaller(skip), j)
-
 	// 自定义字段
 	var textFields []string
 
@@ -300,14 +281,4 @@ func (l logStringer) String() string {
 		return strings.Join(textFields, " ") + "\t" + fields
 	}
 	return fields
-}
-
-func fillCaller(c caller.Caller, j *jsonvalue.V) {
-	parts := strings.Split(string(c.File), "/")
-	if len(parts) > 3 {
-		parts = parts[len(parts)-3:]
-	}
-	j.MustSetString(strings.Join(parts, "/")).At("FILE")
-	j.MustSetInt(c.Line).At("LINE")
-	j.MustSetString(c.Func.Base()).At("FUNC")
 }

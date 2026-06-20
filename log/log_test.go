@@ -5,14 +5,26 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"os"
 	"strings"
 	"sync"
 	"testing"
 	"time"
 
 	"github.com/Andrew-M-C/trpc-go-utils/log"
+	"go.opentelemetry.io/otel"
+	sdktrace "go.opentelemetry.io/otel/sdk/trace"
+	"trpc.group/trpc-go/trpc-go"
 	trpclog "trpc.group/trpc-go/trpc-go/log"
 )
+
+func TestMain(m *testing.M) {
+	tp := sdktrace.NewTracerProvider(sdktrace.WithSampler(sdktrace.AlwaysSample()))
+	otel.SetTracerProvider(tp)
+	trpc.NewServer() // 读取 trpc_go.yaml 配置
+	log.SetLevel("INFO")
+	os.Exit(m.Run())
+}
 
 func TestLogger(*testing.T) {
 	log.Debug("Hello", "world", "!")
@@ -89,22 +101,34 @@ func (s *stubTRPCLogger) record(level string, args ...interface{}) {
 	s.levels[level] = append(s.levels[level], fmt.Sprint(args...))
 }
 
-func (s *stubTRPCLogger) Trace(args ...interface{})                 { s.record("trace", args...) }
-func (s *stubTRPCLogger) Tracef(f string, args ...interface{})     { s.record("trace", fmt.Sprintf(f, args...)) }
-func (s *stubTRPCLogger) Debug(args ...interface{})                 { s.record("debug", args...) }
-func (s *stubTRPCLogger) Debugf(f string, args ...interface{})      { s.record("debug", fmt.Sprintf(f, args...)) }
-func (s *stubTRPCLogger) Info(args ...interface{})                  { s.record("info", args...) }
-func (s *stubTRPCLogger) Infof(f string, args ...interface{})       { s.record("info", fmt.Sprintf(f, args...)) }
-func (s *stubTRPCLogger) Warn(args ...interface{})                  { s.record("warn", args...) }
-func (s *stubTRPCLogger) Warnf(f string, args ...interface{})       { s.record("warn", fmt.Sprintf(f, args...)) }
-func (s *stubTRPCLogger) Error(args ...interface{})                 { s.record("error", args...) }
-func (s *stubTRPCLogger) Errorf(f string, args ...interface{})      { s.record("error", fmt.Sprintf(f, args...)) }
-func (s *stubTRPCLogger) Fatal(args ...interface{})               { s.record("fatal", args...) }
-func (s *stubTRPCLogger) Fatalf(f string, args ...interface{})    { s.record("fatal", fmt.Sprintf(f, args...)) }
-func (s *stubTRPCLogger) Sync() error                               { return nil }
-func (s *stubTRPCLogger) SetLevel(string, trpclog.Level)            {}
-func (s *stubTRPCLogger) GetLevel(string) trpclog.Level             { return trpclog.LevelDebug }
-func (s *stubTRPCLogger) With(...trpclog.Field) trpclog.Logger      { return s }
+func (s *stubTRPCLogger) Trace(args ...interface{}) { s.record("trace", args...) }
+func (s *stubTRPCLogger) Tracef(f string, args ...interface{}) {
+	s.record("trace", fmt.Sprintf(f, args...))
+}
+func (s *stubTRPCLogger) Debug(args ...interface{}) { s.record("debug", args...) }
+func (s *stubTRPCLogger) Debugf(f string, args ...interface{}) {
+	s.record("debug", fmt.Sprintf(f, args...))
+}
+func (s *stubTRPCLogger) Info(args ...interface{}) { s.record("info", args...) }
+func (s *stubTRPCLogger) Infof(f string, args ...interface{}) {
+	s.record("info", fmt.Sprintf(f, args...))
+}
+func (s *stubTRPCLogger) Warn(args ...interface{}) { s.record("warn", args...) }
+func (s *stubTRPCLogger) Warnf(f string, args ...interface{}) {
+	s.record("warn", fmt.Sprintf(f, args...))
+}
+func (s *stubTRPCLogger) Error(args ...interface{}) { s.record("error", args...) }
+func (s *stubTRPCLogger) Errorf(f string, args ...interface{}) {
+	s.record("error", fmt.Sprintf(f, args...))
+}
+func (s *stubTRPCLogger) Fatal(args ...interface{}) { s.record("fatal", args...) }
+func (s *stubTRPCLogger) Fatalf(f string, args ...interface{}) {
+	s.record("fatal", fmt.Sprintf(f, args...))
+}
+func (s *stubTRPCLogger) Sync() error                          { return nil }
+func (s *stubTRPCLogger) SetLevel(string, trpclog.Level)       {}
+func (s *stubTRPCLogger) GetLevel(string) trpclog.Level        { return trpclog.LevelDebug }
+func (s *stubTRPCLogger) With(...trpclog.Field) trpclog.Logger { return s }
 
 func (s *stubTRPCLogger) lines(level string) []string {
 	s.mu.Lock()
@@ -163,9 +187,6 @@ func TestDebugContextWhenDying(t *testing.T) {
 	}
 
 	fields := parseLogFields(t, infoLines[0])
-	if fields["LEVEL"] != "INFO" {
-		t.Fatalf("LEVEL = %v, want INFO", fields["LEVEL"])
-	}
 	if fields["DYING"] != true {
 		t.Fatalf("DYING = %v, want true", fields["DYING"])
 	}
@@ -188,9 +209,6 @@ func TestDebugContextfWhenDying(t *testing.T) {
 	}
 
 	fields := parseLogFields(t, infoLines[0])
-	if fields["LEVEL"] != "INFO" {
-		t.Fatalf("LEVEL = %v, want INFO", fields["LEVEL"])
-	}
 	if fields["DYING"] != true {
 		t.Fatalf("DYING = %v, want true", fields["DYING"])
 	}

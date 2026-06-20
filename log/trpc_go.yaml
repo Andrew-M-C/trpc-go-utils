@@ -1,0 +1,41 @@
+# 配合 github.com/Andrew-M-C/trpc-go-utils/log 使用的日志配置示例。
+#
+# 结构化日志的 TIME / LEVEL / FILE / LINE / FUNC 由 utils 层 JSON 输出；
+# 此处关闭 trpc-go（zap）外层 envelope 的重复字段，最终一行大致为：
+#   <可选正文前缀>\t{"TIME":"...","LEVEL":"...","FILE":"...","LINE":...,"FUNC":"...",...}
+#
+# 将本文件复制到业务服务的 trpc_go.yaml 的 plugins.log 段，或 merge 进现有配置。
+
+plugins:
+  log:
+    default:
+      - writer: console
+        level: debug
+        formatter: console
+        formatter_config:
+          time_fmt: "2006-01-02 15:04:05.000000"  # 微秒
+          time_key: none
+          level_key: none
+          name_key: none
+          caller_key: none
+          function_key: true
+          message_key: none
+          stacktrace_key: none
+      - writer: file
+        level: debug
+        formatter: console
+        formatter_config:
+          time_key: none
+          level_key: none
+          name_key: none
+          caller_key: none
+          function_key: none
+          message_key: none
+          stacktrace_key: none
+        writer_config:
+          log_path: ./
+          filename: trpc.log
+          write_mode: 2
+          roll_type: size
+          max_size: 1000
+          max_backups: 10

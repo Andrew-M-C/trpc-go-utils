@@ -3,21 +3,12 @@ package log
 import (
 	"context"
 	"encoding/json"
-	"os"
 	"strings"
 	"testing"
 
 	"go.opentelemetry.io/otel"
-	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	oteltrace "go.opentelemetry.io/otel/trace"
 )
-
-func TestMain(m *testing.M) {
-	tp := sdktrace.NewTracerProvider(sdktrace.WithSampler(sdktrace.AlwaysSample()))
-	otel.SetTracerProvider(tp)
-	SetLevel("info")
-	os.Exit(m.Run())
-}
 
 func startSpan(ctx context.Context, name string) (context.Context, oteltrace.Span) {
 	return otel.Tracer("github.com/Andrew-M-C/trpc-go-utils/log_test").Start(ctx, name)
