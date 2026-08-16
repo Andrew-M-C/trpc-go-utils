@@ -22,6 +22,10 @@ func RegisterTraceLogFilter() {
 
 func serverFilter(ctx context.Context, req any, next filter.ServerHandleFunc) (rsp any, err error) {
 	ctx, _ = codec.EnsureMessage(ctx)
+	ctx, span := startServerSpanFromHTTP(ctx)
+	if span != nil {
+		defer span.End()
+	}
 
 	caller := func() string {
 		if addr := codec.Message(ctx).RemoteAddr(); addr != nil {
@@ -55,6 +59,11 @@ func serverFilter(ctx context.Context, req any, next filter.ServerHandleFunc) (r
 }
 
 func clientFilter(ctx context.Context, req, rsp any, next filter.ClientHandleFunc) (err error) {
+	ctx, _ = codec.EnsureMessage(ctx)
+	ctx, span := startClientSpan(ctx)
+	defer span.End()
+	injectClientTraceHeaders(ctx)
+
 	callee := func() string {
 		if addr := codec.Message(ctx).RemoteAddr(); addr != nil {
 			return addr.String()
